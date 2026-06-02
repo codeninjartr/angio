@@ -1,0 +1,48 @@
+Epoch 1/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8947 - iou_score: 0.8842 - loss: 0.3788      
+Epoch 1: val_loss improved from None to 0.46875, saving model to models/best_model.keras
+
+Epoch 16: finished saving model to models/best_model.keras
+125/125 ━━━━━━━━━━━━━━━━━━━━ 607s 4s/step - accuracy: 0.8938 - iou_score: 0.8832 - loss: 0.3824 - val_accuracy: 0.8669 - val_iou_score: 0.8542 - val_loss: 0.4687 - learning_rate: 2.0000e-05
+Epoch 17/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8951 - iou_score: 0.8846 - loss: 0.3783  
+Epoch 2: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 549s 4s/step - accuracy: 0.8940 - iou_score: 0.8834 - loss: 0.3819 - val_accuracy: 0.8661 - val_iou_score: 0.8538 - val_loss: 0.4706 - learning_rate: 2.0000e-05
+Epoch 18/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8935 - iou_score: 0.8831 - loss: 0.3827  
+Epoch 18: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 552s 4s/step - accuracy: 0.8940 - iou_score: 0.8834 - loss: 0.3813 - val_accuracy: 0.8667 - val_iou_score: 0.8542 - val_loss: 0.4694 - learning_rate: 2.0000e-05
+Epoch 19/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8949 - iou_score: 0.8843 - loss: 0.3784  
+Epoch 19: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 557s 4s/step - accuracy: 0.8940 - iou_score: 0.8835 - loss: 0.3811 - val_accuracy: 0.8666 - val_iou_score: 0.8541 - val_loss: 0.4698 - learning_rate: 2.0000e-05
+Epoch 20/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8935 - iou_score: 0.8829 - loss: 0.3834  
+Epoch 20: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 545s 4s/step - accuracy: 0.8942 - iou_score: 0.8836 - loss: 0.3807 - val_accuracy: 0.8677 - val_iou_score: 0.8547 - val_loss: 0.4692 - learning_rate: 2.0000e-05
+Epoch 21/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8947 - iou_score: 0.8841 - loss: 0.3793  
+Epoch 21: val_loss did not improve from 0.46875
+
+Epoch 21: ReduceLROnPlateau reducing learning rate to 3.999999898951501e-06.
+125/125 ━━━━━━━━━━━━━━━━━━━━ 535s 4s/step - accuracy: 0.8943 - iou_score: 0.8838 - loss: 0.3804 - val_accuracy: 0.8664 - val_iou_score: 0.8540 - val_loss: 0.4710 - learning_rate: 2.0000e-05
+Epoch 22/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8948 - iou_score: 0.8844 - loss: 0.3775  
+Epoch 22: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 524s 4s/step - accuracy: 0.8944 - iou_score: 0.8839 - loss: 0.3798 - val_accuracy: 0.8668 - val_iou_score: 0.8543 - val_loss: 0.4690 - learning_rate: 4.0000e-06
+Epoch 23/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8934 - iou_score: 0.8828 - loss: 0.3831  
+Epoch 23: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 528s 4s/step - accuracy: 0.8944 - iou_score: 0.8839 - loss: 0.3798 - val_accuracy: 0.8668 - val_iou_score: 0.8544 - val_loss: 0.4694 - learning_rate: 4.0000e-06
+Epoch 24/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 69s/step - accuracy: 0.8939 - iou_score: 0.8833 - loss: 0.3816      
+Epoch 24: val_loss did not improve from 0.46875
+125/125 ━━━━━━━━━━━━━━━━━━━━ 8564s 69s/step - accuracy: 0.8945 - iou_score: 0.8839 - loss: 0.3798 - val_accuracy: 0.8666 - val_iou_score: 0.8542 - val_loss: 0.4694 - learning_rate: 4.0000e-06
+Epoch 10/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 5s/step - accuracy: 0.8941 - iou_score: 0.8836 - loss: 0.3807  
+Epoch 10: val_loss improved from 0.46875 to 0.46828, saving model to models/best_model.keras
+
+Epoch 10: finished saving model to models/best_model.keras
+125/125 ━━━━━━━━━━━━━━━━━━━━ 603s 5s/step - accuracy: 0.8944 - iou_score: 0.8839 - loss: 0.3796 - val_accuracy: 0.8671 - val_iou_score: 0.8544 - val_loss: 0.4683 - learning_rate: 4.0000e-06
+Epoch 11/50
+ 48/125 ━━━━━━━━━━━━━━━━━━━━ 36:50 29s/step - accuracy: 0.8939 - iou_score: 0.8833 - loss: 0.3812

@@ -1,0 +1,17 @@
+[TeeLogger] Saving terminal output to:
+            d:\labdatanew@aniket\unet++\outputs\terminal_20260531_100503.log
+
+[1/5] Loading dataset …
+      TRAIN ← d:/labdatanew@aniket/500_rgb_mask/
+      TEST  ← d:/labdatanew@aniket/137_rgb_mask/
+Traceback (most recent call last):
+  File "d:\labdatanew@aniket\unet++\src\train.py", line 144, in <module>
+    print("\n[1/5] Loading dataset …")
+                       ^^^^^^^^^^^^^^^
+  File "d:\labdatanew@aniket\unet++\src\dataset.py", line 179, in load_train_data
+    return _load_split(TRAIN_RGB_DIR, TRAIN_MASK_DIR,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\labdatanew@aniket\unet++\src\dataset.py", line 137, in _load_split
+    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

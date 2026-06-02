@@ -1,0 +1,12 @@
+[TeeLogger] Terminal output is being saved to:
+            D:\labdatanew@aniket\unet++\outputs\terminal_20260530_211156.log
+
+[1/5] Loading dataset …
+Traceback (most recent call last):
+  File "D:\labdatanew@aniket\unet++\src\train.py", line 126, in <module>
+      File "D:\labdatanew@aniket\unet++\src\train.py", line 88, in write
+    self.terminal.write(message)
+  File "C:\Users\SHUBHAM SINGH\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2190' in position 12: character maps to <undefined>

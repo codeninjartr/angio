@@ -1,0 +1,90 @@
+ven if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
+Starting training loop...
+Epoch 1/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8235 - iou_score: 0.8187 - loss: 0.5967      
+Epoch 1: val_loss improved from None to 1.55200, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 1: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 604s 4s/step - accuracy: 0.8530 - iou_score: 0.8463 - loss: 0.5127 - val_accuracy: 0.7963 - val_iou_score: 0.7958 - val_loss: 1.5520 - learning_rate: 1.0000e-04
+Epoch 2/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8842 - iou_score: 0.8736 - loss: 0.4197  
+Epoch 2: val_loss did not improve from 1.55200
+125/125 ━━━━━━━━━━━━━━━━━━━━ 525s 4s/step - accuracy: 0.8865 - iou_score: 0.8760 - loss: 0.4108 - val_accuracy: 0.7963 - val_iou_score: 0.7958 - val_loss: 2.5105 - learning_rate: 1.0000e-04
+Epoch 3/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 6s/step - accuracy: 0.8905 - iou_score: 0.8799 - loss: 0.3955  
+Epoch 3: val_loss did not improve from 1.55200
+125/125 ━━━━━━━━━━━━━━━━━━━━ 831s 7s/step - accuracy: 0.8898 - iou_score: 0.8792 - loss: 0.3971 - val_accuracy: 0.7963 - val_iou_score: 0.7958 - val_loss: 4.6377 - learning_rate: 1.0000e-04
+Epoch 4/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 40s/step - accuracy: 0.8890 - iou_score: 0.8783 - loss: 0.3990   
+Epoch 4: val_loss did not improve from 1.55200
+125/125 ━━━━━━━━━━━━━━━━━━━━ 4937s 40s/step - accuracy: 0.8910 - iou_score: 0.8804 - loss: 0.3927 - val_accuracy: 0.7963 - val_iou_score: 0.7958 - val_loss: 4.5338 - learning_rate: 1.0000e-04
+Epoch 5/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 5s/step - accuracy: 0.8908 - iou_score: 0.8801 - loss: 0.3936  
+Epoch 5: val_loss did not improve from 1.55200
+125/125 ━━━━━━━━━━━━━━━━━━━━ 675s 5s/step - accuracy: 0.8921 - iou_score: 0.8815 - loss: 0.3885 - val_accuracy: 0.7963 - val_iou_score: 0.7958 - val_loss: 6.8459 - learning_rate: 1.0000e-04
+Epoch 6/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8904 - iou_score: 0.8796 - loss: 0.3937  
+Epoch 6: val_loss did not improve from 1.55200
+
+Epoch 6: ReduceLROnPlateau reducing learning rate to 1.9999999494757503e-05.
+125/125 ━━━━━━━━━━━━━━━━━━━━ 573s 5s/step - accuracy: 0.8923 - iou_score: 0.8817 - loss: 0.3874 - val_accuracy: 0.7963 - val_iou_score: 0.7958 - val_loss: 1.8125 - learning_rate: 1.0000e-04
+Epoch 7/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8921 - iou_score: 0.8813 - loss: 0.3887  
+Epoch 7: val_loss improved from 1.55200 to 1.48342, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 7: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 584s 5s/step - accuracy: 0.8932 - iou_score: 0.8826 - loss: 0.3846 - val_accuracy: 0.7995 - val_iou_score: 0.7983 - val_loss: 1.4834 - learning_rate: 2.0000e-05
+Epoch 8/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8909 - iou_score: 0.8801 - loss: 0.3921  
+Epoch 8: val_loss improved from 1.48342 to 0.95321, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 8: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 559s 4s/step - accuracy: 0.8932 - iou_score: 0.8826 - loss: 0.3844 - val_accuracy: 0.8340 - val_iou_score: 0.8267 - val_loss: 0.9532 - learning_rate: 2.0000e-05
+Epoch 9/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 4s/step - accuracy: 0.8935 - iou_score: 0.8827 - loss: 0.3828  
+Epoch 9: val_loss improved from 0.95321 to 0.66450, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 9: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 514s 4s/step - accuracy: 0.8934 - iou_score: 0.8828 - loss: 0.3838 - val_accuracy: 0.8516 - val_iou_score: 0.8420 - val_loss: 0.6645 - learning_rate: 2.0000e-05
+Epoch 10/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 53s/step - accuracy: 0.8933 - iou_score: 0.8827 - loss: 0.3843   
+Epoch 10: val_loss improved from 0.66450 to 0.50742, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 10: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 6622s 53s/step - accuracy: 0.8935 - iou_score: 0.8829 - loss: 0.3836 - val_accuracy: 0.8648 - val_iou_score: 0.8530 - val_loss: 0.5074 - learning_rate: 2.0000e-05
+Epoch 11/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 5s/step - accuracy: 0.8928 - iou_score: 0.8824 - loss: 0.3862   
+Epoch 11: val_loss improved from 0.50742 to 0.47803, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 11: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 594s 5s/step - accuracy: 0.8935 - iou_score: 0.8829 - loss: 0.3834 - val_accuracy: 0.8659 - val_iou_score: 0.8536 - val_loss: 0.4780 - learning_rate: 2.0000e-05
+Epoch 12/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 60s/step - accuracy: 0.8938 - iou_score: 0.8835 - loss: 0.3819       
+Epoch 12: val_loss improved from 0.47803 to 0.47302, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 12: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 7461s 60s/step - accuracy: 0.8937 - iou_score: 0.8831 - loss: 0.3828 - val_accuracy: 0.8670 - val_iou_score: 0.8543 - val_loss: 0.4730 - learning_rate: 2.0000e-05
+Epoch 13/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 59s/step - accuracy: 0.8944 - iou_score: 0.8838 - loss: 0.3802      
+Epoch 13: val_loss improved from 0.47302 to 0.47139, saving model to models/best_model.h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+
+Epoch 13: finished saving model to models/best_model.h5
+125/125 ━━━━━━━━━━━━━━━━━━━━ 7399s 60s/step - accuracy: 0.8937 - iou_score: 0.8831 - loss: 0.3825 - val_accuracy: 0.8665 - val_iou_score: 0.8541 - val_loss: 0.4714 - learning_rate: 2.0000e-05
+Epoch 14/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 32s/step - accuracy: 0.8933 - iou_score: 0.8827 - loss: 0.3838      
+Epoch 14: val_loss did not improve from 0.47139
+125/125 ━━━━━━━━━━━━━━━━━━━━ 4048s 33s/step - accuracy: 0.8938 - iou_score: 0.8832 - loss: 0.3820 - val_accuracy: 0.8674 - val_iou_score: 0.8547 - val_loss: 0.4738 - learning_rate: 2.0000e-05
+Epoch 15/50
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 5s/step - accuracy: 0.8945 - iou_score: 0.8840 - loss: 0.3794  
+Epoch 15: val_loss did not improve from 0.47139
+125/125 ━━━━━━━━━━━━━━━━━━━━ 594s 5s/step - accuracy: 0.8940 - iou_score: 0.8834 - loss: 0.3819 - val_accuracy: 0.8664 - val_iou_score: 0.8540 - val_loss: 0.4770 - learning_rate: 2.0000e-05
+Epoch 16/50
+ 63/125 ━━━━━━━━━━━━━━━━━━━━ 2:34:04 149s/step - accuracy: 0.8936 - iou_score: 0.8831 - loss: 0.3831

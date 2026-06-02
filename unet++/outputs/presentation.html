@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Thesis Presentation: Retinal Vessel Segmentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <!-- Reveal.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  
+  <!-- Choose a theme: black, white, league, sky, beige, simple, serif, blood, night, moon, solarized -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/league.min.css" id="theme">
+  
+  <style>
+    .reveal h1, .reveal h2, .reveal h3 {
+      text-transform: none;
+    }
+    .img-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .metrics-img {
+      max-width: 90%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .prediction-img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .metric-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      display: inline-block;
+      margin: 10px;
+      font-weight: bold;
+    }
+    .highlight {
+      color: #17ff2e;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      
+      <!-- Slide 1: Title -->
+      <section>
+        <h2>Automated Retinal Blood Vessel Segmentation</h2>
+        <h3>Using UNet++ Architecture</h3>
+        <p><br></p>
+        <p><strong>Thesis Defense Presentation</strong></p>
+        <p><small>IIT (BHU)</small></p>
+      </section>
+
+      <!-- Slide 2: Introduction -->
+      <section>
+        <section>
+          <h2>Introduction & Motivation</h2>
+          <ul>
+            <li><strong>Clinical Importance:</strong> Retinal blood vessels are key indicators for diagnosing cardiovascular and ophthalmological diseases (e.g., Diabetic Retinopathy).</li>
+            <li><strong>The Challenge:</strong> Manual segmentation by clinicians is time-consuming, subjective, and prone to human error.</li>
+            <li><strong>The Complexity:</strong> Retinal images feature fine, low-contrast micro-capillaries that are incredibly difficult to extract precisely.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Objective</h2>
+          <p>Develop an automated, highly precise deep learning model capable of extracting the full vascular network from RGB fundus images without manual intervention.</p>
+        </section>
+      </section>
+
+      <!-- Slide 3: Dataset -->
+      <section>
+        <h2>The Dataset</h2>
+        <ul>
+          <li><strong>Source:</strong> Custom annotated clinical dataset.</li>
+          <li><strong>Volume:</strong> 137 High-Resolution RGB Fundus images.</li>
+          <li><strong>Ground Truth:</strong> Binary masks manually annotated by experts.</li>
+          <li><strong>Preprocessing:</strong> 
+            <ul>
+              <li>Resizing to unified dimensions (256x256).</li>
+              <li>Min-Max Normalization to [0, 1] range.</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Slide 4: Methodology -->
+      <section>
+        <section>
+          <h2>Methodology: UNet++</h2>
+          <p>We implemented <strong>UNet++</strong>, a deeply supervised encoder-decoder network connected by a series of nested, dense skip pathways.</p>
+          <ul>
+            <li><strong>Advantage:</strong> The nested pathways bridge the semantic gap between the encoder and decoder feature maps.</li>
+            <li><strong>Result:</strong> Vastly improved capture of both thick primary vessels and ultra-thin capillaries compared to standard U-Net.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Loss Function Formulation</h2>
+          <p>Retinal segmentation suffers from severe class imbalance (background pixels far outnumber vessel pixels).</p>
+          <div class="metric-box">
+            Loss = Binary Cross-Entropy (BCE) + Dice Loss
+          </div>
+          <ul>
+            <li><strong>BCE:</strong> Ensures stable pixel-wise probability distributions.</li>
+            <li><strong>Dice Loss:</strong> Directly maximizes the Intersection over Union, forcing the model to focus on the thin vessel structures.</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- Slide 5: Experimental Setup -->
+      <section>
+        <h2>Experimental Setup</h2>
+        <ul>
+          <li><strong>Framework:</strong> TensorFlow 2.x & Keras</li>
+          <li><strong>Optimizer:</strong> Adam Optimizer</li>
+          <li><strong>Learning Rate Scheduling:</strong> <code>ReduceLROnPlateau</code> to decay LR automatically when metrics stagnate.</li>
+          <li><strong>Metrics Tracked:</strong> 
+            <ul>
+              <li>Dice Coefficient</li>
+              <li>Intersection over Union (IoU)</li>
+              <li>Accuracy, Precision, Recall</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Slide 6: Results - Metrics -->
+      <section>
+        <h2>Training Metrics</h2>
+        <p>The model reached convergence reliably over 26 epochs.</p>
+        <img src="training_metrics_plot.png" class="metrics-img" alt="Training Metrics">
+        <p>
+          <span class="metric-box">Best Val Dice: <span class="highlight">~0.926</span></span>
+          <span class="metric-box">Best Val IoU: <span class="highlight">~0.901</span></span>
+        </p>
+      </section>
+
+      <!-- Slide 7: Results - Visual -->
+      <section>
+        <h2>Visual Inference Output</h2>
+        <p>Prediction on an unseen test sample (Image 501)</p>
+        <img src="single_prediction_501.png" class="prediction-img" alt="Prediction Output">
+        <p><small>Red overlay indicates predicted vessel boundaries matching the underlying image perfectly.</small></p>
+      </section>
+
+      <!-- Slide 8: Conclusion -->
+      <section>
+        <h2>Conclusion & Future Work</h2>
+        <ul>
+          <li><strong>Conclusion:</strong> UNet++ coupled with a hybrid BCE+Dice loss achieves exceptional precision in retinal vessel segmentation, outperforming traditional approaches.</li>
+          <br>
+          <li><strong>Future Work:</strong>
+            <ul>
+              <li>Integration of Spatial Attention Modules.</li>
+              <li>Multi-class classification (Arteries vs. Veins).</li>
+              <li>Cross-dataset generalization (e.g., testing on DRIVE or STARE datasets).</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Slide 9: Q&A -->
+      <section>
+        <h2>Thank You</h2>
+        <p>Questions?</p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      transition: 'fade', // none/fade/slide/convex/concave/zoom
+      pdfMaxPagesPerSlide: 1,
+      pdfSeparateFragments: false
+    });
+  </script>
+</body>
+</html>
