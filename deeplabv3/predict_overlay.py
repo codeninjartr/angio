@@ -1,6 +1,8 @@
 import os
 import cv2
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from losses import bce_dice_loss
@@ -21,7 +23,7 @@ model = tf.keras.models.load_model(
 )
 
 # 2. Setup image directory
-IMG_DIR = "d:/seemant-labdata/137_rgb_mask/RGB"
+IMG_DIR = r"d:\labdatanew_Seemant\137_rgb_mask\RGB"
 IMG_SIZE = 256
 
 for i in range(501, 511):
@@ -53,41 +55,76 @@ for i in range(501, 511):
     # Binarize prediction
     pred_mask = (pred[0] > 0.5).astype(np.float32)
     
-    # Resize the mask back to the original image size for a high-quality overlay
-    orig_h, orig_w = orig_img.shape[:2]
-    pred_mask_resized = cv2.resize(pred_mask, (orig_w, orig_h))
+    # Use 256x256 resolution for all panels (same as UNet++)
+    pred_mask_resized = pred_mask.squeeze()  # already 256x256
     
-    # Create overlay
-    overlay = orig_img_rgb.copy()
+    # Create overlay at 256x256
+    overlay = img_resized.copy()
     
     # Create a red overlay layer
-    color_mask = np.zeros_like(orig_img_rgb)
+    color_mask = np.zeros_like(img_resized)
     color_mask[:, :, 0] = 255  # Red channel
     
     # Alpha blend where mask is 1
-    alpha = 0.4  # Adjust transparency of the overlay
+    alpha = 0.4
     mask_indices = pred_mask_resized > 0.5
     
-    # Blend the original image with the red color mask
+    # Blend
     overlay[mask_indices] = cv2.addWeighted(
-        orig_img_rgb[mask_indices], 1 - alpha, 
+        img_resized[mask_indices], 1 - alpha, 
         color_mask[mask_indices], alpha, 0
     )
     
-    # Plot side-by-side: Original vs Overlay vs Mask
-    plt.figure(figsize=(15, 5))
+    # Setup MASK_DIR (assuming it is parallel to IMG_DIR)
+    MASK_DIR = IMG_DIR.replace("RGB", "MASK")
+    mask_path = os.path.join(MASK_DIR, f"gauss_{img_name}")   # masks are gauss_NNN_RGB.jpg
     
-    plt.subplot(1, 3, 1)
-    plt.imshow(orig_img_rgb)
-    plt.title(f"Original: {img_name}")
+    gt_mask_resized = None
+    if os.path.exists(mask_path):
+        gt_mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+        if gt_mask is not None:
+            gt_mask_resized = cv2.resize(gt_mask, (IMG_SIZE, IMG_SIZE), interpolation=cv2.INTER_NEAREST)
+    
+    # Compute Dice/IoU if GT available
+    dice = 0.0
+    iou = 0.0
+    if gt_mask_resized is not None:
+        gt_bin = (gt_mask_resized > 127).astype(np.float32)
+        pred_bin = (pred_mask_resized > 0.5).astype(np.float32)
+        inter = np.sum(gt_bin * pred_bin)
+        dice = (2 * inter + 1e-6) / (np.sum(gt_bin) + np.sum(pred_bin) + 1e-6)
+        union = np.sum(gt_bin) + np.sum(pred_bin) - inter
+        iou = (inter + 1e-6) / (union + 1e-6)
+        print(f"  Dice: {dice:.4f}  IoU: {iou:.4f}")
+    
+    # Plot in 2x2 grid
+    fig = plt.figure(figsize=(10, 10))
+    fig.suptitle(
+        f"DeepLabV3+ Prediction  —  Image {i}" +
+        (f"\nDice={dice:.4f}  IoU={iou:.4f}" if gt_mask_resized is not None else ""),
+        fontsize=13, fontweight="bold"
+    )
+    
+    plt.subplot(2, 2, 1)
+    plt.imshow(img_resized)
+    plt.title(f"Original: {img_name} (256x256)")
     plt.axis("off")
     
-    plt.subplot(1, 3, 2)
+    plt.subplot(2, 2, 2)
+    if gt_mask_resized is not None:
+        plt.imshow(gt_mask_resized, cmap='gray')
+        plt.title("Ground Truth Mask")
+    else:
+        plt.text(0.5, 0.5, "No GT Available", ha='center', va='center')
+        plt.title("Ground Truth Mask")
+    plt.axis("off")
+    
+    plt.subplot(2, 2, 3)
     plt.imshow(pred_mask_resized, cmap='gray')
     plt.title("Predicted Mask")
     plt.axis("off")
     
-    plt.subplot(1, 3, 3)
+    plt.subplot(2, 2, 4)
     plt.imshow(overlay)
     plt.title("Prediction Overlay")
     plt.axis("off")

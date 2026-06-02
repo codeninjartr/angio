@@ -32,8 +32,8 @@ IMG_SIZE   = (256, 256)
 THRESHOLD  = 0.5
 
 MODEL_PATH = "models/best_model.keras"
-RGB_DIR    = r"d:\labdatanew@aniket\137_rgb_mask\RGB"
-MASK_DIR   = r"d:\labdatanew@aniket\137_rgb_mask\MASK"
+RGB_DIR    = r"d:\labdatanew_Seemant\137_rgb_mask\RGB"
+MASK_DIR   = r"d:\labdatanew_Seemant\137_rgb_mask\MASK"
 OUTPUT_DIR = "outputs"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -65,7 +65,7 @@ for IMAGE_ID in IMAGE_IDS:
     print(f"[2/4] Loading image {IMAGE_ID}_RGB.jpg …")
     
     rgb_path  = os.path.join(RGB_DIR,  f"{IMAGE_ID}_RGB.jpg")
-    mask_path = os.path.join(MASK_DIR, f"{IMAGE_ID}_RGB.png")   # masks are PNG
+    mask_path = os.path.join(MASK_DIR, f"gauss_{IMAGE_ID}_RGB.jpg")   # masks are gauss_NNN_RGB.jpg
     
     if not os.path.exists(rgb_path):
         print(f"      [WARN] Image not found: {rgb_path}, skipping...")
@@ -120,31 +120,36 @@ for IMAGE_ID in IMAGE_IDS:
     )
     cv2.drawContours(overlay_u8, contours, -1, (255, 0, 0), 2)   # red contour
     
-    # Create figure
-    num_cols = 4 if gt_mask is not None else 3
-    fig, axes = plt.subplots(1, num_cols, figsize=(5 * num_cols, 6))
+    # Create figure in 2x2 grid
+    fig, axes = plt.subplots(2, 2, figsize=(10, 10))
     fig.suptitle(
         f"UNet++ Prediction  —  Image {IMAGE_ID}" +
-        (f"  |  Dice={dice:.4f}  IoU={iou:.4f}" if gt_mask is not None else ""),
+        (f"\nDice={dice:.4f}  IoU={iou:.4f}" if gt_mask is not None else ""),
         fontsize=13, fontweight="bold"
     )
     
-    col = 0
-    axes[col].imshow(img_resized);             axes[col].set_title("RGB Input",       fontsize=11)
-    col += 1
+    # [0, 0] RGB Input
+    axes[0, 0].imshow(img_resized)
+    axes[0, 0].set_title("RGB Input", fontsize=11)
     
+    # [0, 1] Ground Truth
     if gt_mask is not None:
-        axes[col].imshow(gt_mask, cmap="gray"); axes[col].set_title("Ground Truth",   fontsize=11)
-        col += 1
+        axes[0, 1].imshow(gt_mask, cmap="gray")
+        axes[0, 1].set_title("Ground Truth", fontsize=11)
+    else:
+        axes[0, 1].text(0.5, 0.5, "No GT Available", ha='center', va='center')
+        axes[0, 1].set_title("Ground Truth", fontsize=11)
     
-    axes[col].imshow(pred_prob, cmap="hot", vmin=0, vmax=1)
-    axes[col].set_title("Prediction (heatmap)", fontsize=11)
-    col += 1
+    # [1, 0] Predicted Mask
+    # Showing the binary predicted mask instead of the heatmap
+    axes[1, 0].imshow(pred_mask, cmap="gray")
+    axes[1, 0].set_title("Predicted Mask", fontsize=11)
     
-    axes[col].imshow(overlay_u8)
-    axes[col].set_title("Overlay (red = predicted boundary)", fontsize=11)
+    # [1, 1] Overlay
+    axes[1, 1].imshow(overlay_u8)
+    axes[1, 1].set_title("Overlay (red = predicted boundary)", fontsize=11)
     
-    for ax in axes:
+    for ax in axes.flat:
         ax.axis("off")
     
     plt.tight_layout()
