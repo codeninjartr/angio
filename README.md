@@ -137,7 +137,7 @@ This will perform skeletonization on the predicted binary masks, locate branch p
 
 ## 📈 Vessel Growth Analysis (Multi-Concentration Comparison)
 
-To analyze how retinal/angiogenesis blood vessels grow and branch over time across different drug concentrations, we performed a quantitative growth analysis for **Control**, **0.1ug**, **1ug**, and **10ug** concentrations. 
+To analyze how egg embryo/angiogenesis blood vessels grow and branch over time across different drug concentrations, we performed a quantitative growth analysis for **Control**, **0.1ug**, **1ug**, and **10ug** concentrations. 
 
 ### Methodology
 1. **Metadata Decoding**: Dataset images (500 train, 137 test) were matched back to the original cropped files in the raw dataset using downscaled MSE similarity to extract experimental metadata (concentration and timepoints).
