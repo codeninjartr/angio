@@ -135,5 +135,43 @@ This will perform skeletonization on the predicted binary masks, locate branch p
 
 ---
 
+## 📈 Vessel Growth Analysis (1ug Concentration)
+
+To analyze how retinal/angiogenesis blood vessels grow and branch over time, we performed a quantitative growth analysis for the **1ug** drug concentration. 
+
+### Methodology
+1. **Metadata Decoding**: Dataset images (500 train, 137 test) were matched back to the original cropped files in the raw dataset using downscaled MSE similarity to extract experimental metadata (concentration and timepoints).
+2. **Segmentation**: Predicted high-fidelity vessel masks for the 247 images identified as `1ug` using our best-performing **UNet++ (ResNet50)** model.
+3. **Skeletonization & Feature Extraction**: Skeletonized the segmentation masks and ran neighborhood convolution to extract:
+   - **Vessel Networks**: Count of distinct connected vascular trees.
+   - **Branch Points**: Locations where vessels branch/bifurcate (neighbor count > 2).
+   - **End Points**: Vessel endpoints/terminations (neighbor count = 1).
+4. **Aggregation**: Aggregated metrics by time point (0h, 2h, 3h, 4h, 8h, 24h, 32h) to compute mean and standard deviation.
+
+### Summary of Results (1ug)
+
+| Time Point | Sample Size (n) | Vessel Networks (Mean ± SD) | Branch Points (Mean ± SD) | End Points (Mean ± SD) |
+| :---: | :---: | :---: | :---: | :---: |
+| **0 hours** | 73 | 11.44 ± 3.98 | 2920.16 ± 908.08 | 50.15 ± 13.46 |
+| **2 hours** | 46 | 11.65 ± 3.73 | 2605.83 ± 921.93 | 48.09 ± 10.21 |
+| **3 hours** | 4 | 14.00 ± 2.55 | 3276.00 ± 548.58 | 53.75 ± 7.53 |
+| **4 hours** | 45 | 12.67 ± 3.13 | 2719.98 ± 846.45 | 48.53 ± 10.88 |
+| **8 hours** | 52 | 11.94 ± 3.21 | 2760.40 ± 806.49 | 47.50 ± 10.43 |
+| **24 hours** | 25 | 13.60 ± 4.34 | 2529.24 ± 820.60 | 51.40 ± 7.38 |
+| **32 hours** | 2 | 7.50 ± 1.50 | 2531.50 ± 230.50 | 34.00 ± 5.00 |
+
+### Visualizations
+
+The script `vessel_growth_analysis.py` generates the following assets:
+- **`outputs/vessel_growth_plots.png`**: Progression curves for networks, branches, and endpoints over time.
+- **`outputs/vessel_growth_table.png`**: Styled publication-ready results table.
+
+You can run the analysis using:
+```bash
+python vessel_growth_analysis.py
+```
+
+---
+
 ## 📜 License
 *Please specify the license for this repository.*
