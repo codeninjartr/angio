@@ -1,0 +1,88 @@
+\chapter{Proposed Methodology}
+\label{ch:methodology}
+
+This chapter provides a comprehensive, component-level breakdown of the automated vessel segmentation and morphological analysis pipeline developed in this thesis. The methodology is broadly partitioned into three primary stages: dataset preprocessing and augmentation, semantic segmentation using advanced deep learning architectures (UNet++ and DeepLabV3+), and post-segmentation mathematical skeletonization for topological feature extraction.
+
+\section{Dataset Description and Preprocessing}
+The foundation of any deep learning model lies in the quality, diversity, and statistical distribution of its training data. The primary dataset utilized in this research consists of 637 high-resolution RGB angiography images, partitioned into a training set of 500 images and an independent, hold-out testing set of 137 images. 
+
+Each RGB image, denoted as $I \in \mathbb{R}^{H \times W \times 3}$, is accompanied by an expert-annotated binary ground truth mask $G \in \{0,1\}^{H \times W}$. In these masks, a pixel intensity of 255 (normalized to 1) denotes the presence of a blood vessel (foreground), while an intensity of 0 denotes background tissue. To ensure computational efficiency and standardized batch processing during network training, all input images and their corresponding masks are initially resized to a uniform spatial resolution of $256 \times 256$ pixels using bilinear interpolation for the images and nearest-neighbor interpolation for the masks to preserve discrete binary boundaries.
+
+Following spatial normalization, the pixel intensities of the RGB images are normalized from the range $[0, 255]$ to the range $[0.0, 1.0]$. This vital preprocessing step stabilizes the gradients during backpropagation and accelerates the convergence of the neural networks by ensuring that the input features operate on a similar numerical scale.
+
+\section{Architecture 1: The UNet++ Framework}
+The first architecture explored in this thesis is UNet++, specifically designed to overcome the semantic gap inherent in the skip connections of standard U-Net models. We implement and evaluate two distinct variants of UNet++: a pure, from-scratch 4-level encoder, and a hybrid architecture utilizing a frozen, pre-trained ResNet50 backbone.
+
+\subsection{Dense Skip Pathways Formulation}
+The core innovation of UNet++ lies in its dense, nested skip pathways. Let $x^{i,j}$ denote the output feature map of node $X_{i,j}$ in the UNet++ grid, where $i \in \{0, 1, 2, 3, 4\}$ indexes the down-sampling layer along the encoder (depth), and $j$ indexes the convolution layer along the dense skip pathway.
+
+The feature map $x^{i,j}$ is mathematically computed as follows:
+\begin{equation}
+    x^{i,j} = \begin{cases}
+        \mathcal{H} \left( \mathcal{D}(x^{i-1, j}) \right) & \text{if } j = 0 \\
+        \mathcal{H} \left( \left[ \left[ x^{i,k} \right]_{k=0}^{j-1}, \mathcal{U}(x^{i+1, j-1}) \right] \right) & \text{if } j > 0
+    \end{cases}
+\end{equation}
+where $\mathcal{H}(\cdot)$ represents a convolution block consisting of two consecutive sequences of $3 \times 3$ Convolution $\rightarrow$ Batch Normalization $\rightarrow$ ReLU activation, followed by an optional spatial dropout layer. $\mathcal{D}(\cdot)$ denotes a $2 \times 2$ Max Pooling operation for spatial down-sampling (stride 2), and $\mathcal{U}(\cdot)$ denotes a $2 \times 2$ bilinear Up-Sampling operation. The operation $[\cdot]$ denotes the channel-wise concatenation of feature maps.
+
+For instance, node $X_{0,3}$ receives the concatenated outputs of all its same-level predecessors ($X_{0,0}, X_{0,1}, X_{0,2}$) as well as the up-sampled output of the deeper node $X_{1,2}$. This dense concatenation ensures that by the time the feature maps reach the final full-resolution decoder node $X_{0,4}$, the network has fused features of highly varying semantic depth, thereby preserving the spatial continuity of thin vessel segments.
+
+\subsection{UNet++ with ResNet50 Encoder}
+To leverage transfer learning, we graft the dense UNet++ decoder onto an ImageNet-pretrained ResNet50 backbone. The ResNet50 encoder processes the $256 \times 256$ input image through five primary stages, generating multi-scale feature maps at strides of 2, 4, 8, 16, and 32. To prevent catastrophic forgetting and over-parameterization on our relatively small dataset of 500 training images, the weights of the early layers of the ResNet50 backbone (specifically the first 80 layers) are frozen during training.
+
+The output feature maps from the ResNet50 blocks (e.g., \texttt{conv1\_relu}, \texttt{conv2\_block3\_out}, etc.) are projected via $3 \times 3$ convolutions to a uniform channel depth (128 channels). These projected multi-scale features serve as the $j=0$ column of the UNet++ grid, seamlessly feeding into the dense skip pathways described previously.
+
+\section{Architecture 2: The DeepLabV3+ Framework}
+The second architecture implemented is DeepLabV3+, which approaches the multi-scale challenge not through dense decoder pathways, but through advanced atrous (dilated) convolutions within the encoder bottleneck. 
+
+\subsection{Atrous Spatial Pyramid Pooling (ASPP)}
+The core component of our DeepLabV3+ implementation is the Atrous Spatial Pyramid Pooling (ASPP) module. Let $y = f(x)$ denote a 2D discrete convolution. For a standard convolution, the output $y[i,j]$ over a feature map $x$ with a filter $w$ of size $K \times K$ is:
+\begin{equation}
+    y[i,j] = \sum_{m,n}^{K} x[i+m, j+n] \cdot w[m,n]
+\end{equation}
+An atrous convolution introduces a dilation rate $r$, modifying the operation to:
+\begin{equation}
+    y[i,j] = \sum_{m,n}^{K} x[i+r \cdot m, j+r \cdot n] \cdot w[m,n]
+\end{equation}
+When $r=1$, this reverts to a standard convolution. When $r>1$, the filter's receptive field is expanded without increasing the number of trainable parameters or down-sampling the spatial resolution.
+
+In our methodology, the ResNet50 backbone processes the image down to a stride of 16 (output shape $16 \times 16$). The ASPP module then processes this $16 \times 16$ feature map simultaneously through five parallel branches:
+\begin{enumerate}
+    \item A $1 \times 1$ convolution branch.
+    \item A $3 \times 3$ atrous convolution with dilation rate $r = 6$.
+    \item A $3 \times 3$ atrous convolution with dilation rate $r = 12$.
+    \item A $3 \times 3$ atrous convolution with dilation rate $r = 18$.
+    \item An Image Pooling branch, which applies Global Average Pooling over the entire $16 \times 16$ spatial dimension, followed by a $1 \times 1$ convolution, and is then bilinearly up-sampled back to $16 \times 16$.
+\end{enumerate}
+The outputs of all five branches are concatenated channel-wise and projected through a final $1 \times 1$ convolution block. This ASPP tensor encapsulates rich semantic context across highly varying spatial scales.
+
+\subsection{DeepLabV3+ Decoder Design}
+The ASPP output tensor is initially up-sampled by a factor of 4 (via bilinear interpolation) to a spatial resolution of $64 \times 64$. Concurrently, low-level spatial features from the ResNet50 encoder (specifically the output from \texttt{conv2\_block3\_out}, which also sits at a $64 \times 64$ resolution) are projected down to 48 channels via a $1 \times 1$ convolution to reduce their dimensional dominance.
+
+These low-level spatial features are then concatenated with the up-sampled ASPP features. This fused tensor undergoes a series of two $3 \times 3$ convolutions to refine object boundaries. Finally, the tensor is up-sampled by another factor of 4 to match the original $256 \times 256$ input resolution. A final $1 \times 1$ convolution with a Sigmoid activation function maps the dense tensor to a binary probability map $P \in [0,1]^{256 \times 256}$.
+
+\section{Post-Processing: Topological Skeletonization}
+The primary objective of automated angiography analysis is not merely to generate a visual mask, but to extract actionable clinical numbers. To transition from pixel-level predictions to morphological metrics, we designed a downstream post-processing pipeline centered on mathematical skeletonization.
+
+\subsection{Thresholding and Binarization}
+The continuous probability map $P$ generated by either UNet++ or DeepLabV3+ is first thresholded into a discrete binary mask $M$:
+\begin{equation}
+    M(x,y) = \begin{cases}
+        1 & \text{if } P(x,y) \ge 0.5 \\
+        0 & \text{if } P(x,y) < 0.5
+    \end{cases}
+\end{equation}
+
+\subsection{Morphological Thinning}
+The binary mask $M$ is then passed through an iterative thinning algorithm (such as the classical Zhang-Suen algorithm). Let $\mathcal{S}(M)$ denote the skeletonization operation. The algorithm iteratively erodes the boundary pixels of the foreground vessel structures until the structures are exactly one pixel wide, resulting in the topological skeleton graph $S = \mathcal{S}(M)$. 
+
+This skeleton preserves the fundamental Euler characteristic of the vascular tree. Because the width of the vessels has been collapsed to a single pixel line, we can now reliably count distinct vascular structures by identifying connected components within the graph $S$. 
+
+\subsection{Feature Extraction: Junctions and Networks}
+To extract morphological features, we traverse the skeleton graph $S$ using a $3 \times 3$ local neighborhood operation. For every foreground pixel $p_i \in S$, we count the number of adjacent foreground pixels in its 8-connected neighborhood $N_8(p_i)$.
+\begin{itemize}
+    \item \textbf{End Points:} If $\sum N_8(p_i) == 1$, the pixel is classified as a terminal end point of a capillary.
+    \item \textbf{Branch Points (Bifurcations):} If $\sum N_8(p_i) \ge 3$, the pixel is classified as a bifurcation or crossover junction.
+\end{itemize}
+
+By removing the branch points from the skeleton graph $S$, the network decomposes into a set of disjoint, isolated vessel segments. Conversely, by applying a standard Connected Component Labeling (CCL) algorithm to the full skeleton $S$, we can accurately count the number of \textit{distinct, non-contiguous vessel networks} present in the angiogram. These quantitative features (Network Count, Branch Point Count, End Point Count) are automatically logged to a CSV report (e.g., \texttt{vessel\_counts.csv}), providing clinicians with a robust, objective numerical analysis of the patient's vascular health.

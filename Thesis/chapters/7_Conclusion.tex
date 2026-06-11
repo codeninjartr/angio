@@ -1,0 +1,36 @@
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+
+This thesis presented a comprehensive, end-to-end computational pipeline designed to address the critical clinical challenge of automated blood vessel segmentation and morphological analysis from angiography images. Driven by the clinical necessity to replace labor-intensive, subjective manual annotations with objective, highly precise algorithms, this research successfully engineered, optimized, and rigorously evaluated two state-of-the-art deep learning architectures: the deeply supervised, dense-decoder UNet++ and the multi-scale, contextually aware DeepLabV3+. 
+
+\section{Summary of Core Contributions}
+The primary objective of this thesis was to transcend simple pixel-level binary classification and construct a system capable of extracting actionable quantitative biomarkers from highly complex, imbalanced angiographic datasets. This objective was successfully met through several core technical contributions:
+
+\subsection{Architectural Efficacy in Microvascular Environments}
+This research provided a rigorous comparative analysis of how different deep learning structural paradigms handle the unique topological challenges of vascular trees. The empirical results definitively demonstrated that while standard Fully Convolutional Networks (like the baseline U-Net) struggle with the semantic gap between encoder and decoder---often losing the continuity of ultra-thin micro-capillaries---advanced architectures specifically designed to bridge this gap excel. 
+
+The \textbf{DeepLabV3+} architecture, leveraging its Atrous Spatial Pyramid Pooling (ASPP) module, proved highly adept at simultaneously capturing the structural context of massive primary arteries and the delicate boundaries of smaller branching veins, achieving a highly competitive Validation Dice Coefficient of 0.9216. 
+
+However, the empirical evidence ultimately positioned the \textbf{UNet++} architecture, specifically when grafted onto a pre-trained ResNet50 backbone, as the superior model for this specific clinical domain. By constantly feeding high-resolution spatial feature maps from the early encoder layers through a dense grid of nested convolutions directly into the decoder, UNet++ achieved an unparalleled Validation Intersection over Union (IoU) of 0.8605. This architecture demonstrated the highest robustness in preserving the absolute finest, single-pixel-wide capillary networks at the extreme, low-contrast periphery of the angiograms, effectively preventing the fragmentation that plagues simpler models.
+
+\subsection{Mitigation of Extreme Class Imbalance}
+A fundamental technical hurdle addressed in this work was the severe class imbalance inherent in angiographic data, where vascular foreground pixels typically constitute less than 10\% of the image matrix. The thesis demonstrated that optimizing neural networks solely on standard Binary Cross-Entropy results in catastrophic failure due to background domination.
+
+This challenge was successfully mitigated through the theoretical formulation and empirical implementation of hybrid loss functions. By combining pixel-level optimization (BCE or Focal Loss) with regional overlap optimization (the differentiable soft Dice Loss), the gradient descent landscape was radically altered. The $\mathcal{L}_{BCE+Dice}$ formulation successfully forced the networks to prioritize intersection fidelity, entirely preventing background collapse and driving the high quantitative metrics observed during testing.
+
+\subsection{Transition to Actionable Clinical Biomarkers}
+Perhaps the most significant contribution of this thesis is the integration of the mathematical skeletonization and topological analysis pipeline. Recognizing that a binary probability mask is merely an intermediate visual aid, the proposed methodology applied iterative thinning algorithms (such as the Zhang-Suen algorithm) to reduce the segmented vascular tree to a 1-pixel thick topological graph.
+
+By programmatically traversing this graph, the system demonstrated the capability to autonomously, instantaneously, and objectively extract complex morphological counts---specifically the number of distinct connected vascular networks, the number of structural bifurcations (branch points), and the number of terminal capillaries (end points). These metrics, which are physically impossible for a clinician to extract manually at scale, provide direct, quantitative indicators of neovascularization, ischemia, and overall vascular health, fulfilling the ultimate objective of creating a clinically useful diagnostic tool.
+
+\section{Avenues for Future Research}
+While the methodologies developed in this thesis represent a significant advancement in automated angiography analysis, they also illuminate clear pathways for future academic research and clinical integration.
+
+\subsection{Transition to 3D Volumetric Segmentation}
+The current pipeline operates on 2D planar projections of the vascular network. However, the human vascular system is inherently a complex 3D structure. The 2D projection inherently involves overlapping vessels, which complicates both the segmentation process and the downstream topological counting. Future research must focus on transitioning the 2D UNet++ and DeepLabV3+ architectures into fully 3D volumetric convolution networks (e.g., 3D UNet++). Applying these models directly to 3D clinical imaging modalities, such as Magnetic Resonance Angiography (MRA) or Computed Tomography Angiography (CTA), would eliminate the overlap problem and allow for the extraction of true 3D spatial biomarkers.
+
+\subsection{Adaptive Thresholding for Micro-Capillary Preservation}
+As identified in the limitations section of Chapter 6, the current post-processing pipeline relies on a static binarization threshold ($\tau = 0.5$). While effective for primary vessels, this static threshold can inadvertently break the continuity of low-confidence micro-capillaries, generating false network fragmentations during skeletonization. Future work must investigate adaptive, hysteresis-based thresholding algorithms that track probability ridge-lines in the continuous output map, preserving the connectivity of delicate structures prior to the binary morphological thinning step.
+
+\subsection{Real-time Clinical Deployment and Hardware Optimization}
+The massive parameter space of architectures like DeepLabV3+ currently requires substantial GPU acceleration, restricting their use to high-performance computing clusters. For this technology to be actively deployed in clinical operating rooms---for instance, to aid in real-time stent placement during fluoroscopy---the inference speed must be drastically reduced. Future research should explore network quantization, weight pruning, and knowledge distillation techniques to compress these heavy architectures into lightweight models capable of running in real-time on standard hospital hardware without sacrificing the structural fidelity of the vessel segmentations.

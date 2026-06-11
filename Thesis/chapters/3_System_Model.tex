@@ -1,0 +1,141 @@
+\chapter{Preliminaries and System Model}
+\label{ch:system_model}
+
+This chapter formalizes the mathematical and theoretical foundations underpinning the proposed vessel segmentation and morphological analysis pipeline. It defines the formal representation of the input angiography data, the mathematical principles of the spatial and pixel-level augmentations applied during training, the formal derivations of the segmentation evaluation metrics, and the precise mathematical definitions of the hybrid loss functions utilized to optimize the neural architectures.
+
+\section{Image Data Representation}
+A digital angiographic image, denoted as $I$, can be formally represented as a discrete spatial grid of pixels. Let the spatial domain of the image be defined as a 2D Euclidean coordinate system $\Omega \subset \mathbb{Z}^2$, where $(x,y) \in \Omega$ represents the spatial coordinate of a specific pixel. The dimensions of the image are given by $H \times W$, where $H$ is the height and $W$ is the width.
+
+For a standard RGB color image, $I$ is a mapping from the spatial domain to a 3-dimensional color space:
+\begin{equation}
+    I: \Omega \rightarrow \mathbb{R}^3
+\end{equation}
+Thus, the value of the image at coordinate $(x,y)$ is a vector $I(x,y) = [r, g, b]^T$, where $r, g, b \in [0, 255]$ represent the intensities of the red, green, and blue color channels, respectively.
+
+In the context of binary semantic segmentation, the objective of the neural network is to learn a mapping function $\mathcal{F}_\theta$ parameterized by weights $\theta$ that transforms the input image $I$ into a probability map $P$:
+\begin{equation}
+    \mathcal{F}_\theta(I) = P
+\end{equation}
+where $P \in [0,1]^{H \times W}$. The value $P(x,y)$ represents the predicted probability that the pixel at coordinate $(x,y)$ belongs to the foreground class (i.e., it is a blood vessel).
+
+The ground truth corresponding to image $I$ is provided as a binary mask $G \in \{0,1\}^{H \times W}$, where $G(x,y) = 1$ if the pixel belongs to a vessel, and $G(x,y) = 0$ if it belongs to the background.
+
+\section{Data Augmentation Mathematics}
+Deep neural networks are notoriously data-hungry and prone to overfitting, particularly in medical imaging where annotated datasets are often severely limited in size. To artificially expand the size and variance of the training dataset, we employ heavy data augmentation utilizing the Albumentations library \parencite{buslaev2020albumentations}.
+
+Data augmentation applies a series of stochastic transformations to both the input image $I$ and its corresponding ground truth mask $G$. Let $\mathcal{T}$ denote an augmentation transformation. The transformed image and mask are given by:
+\begin{equation}
+    I' = \mathcal{T}_{img}(I), \quad G' = \mathcal{T}_{mask}(G)
+\end{equation}
+Crucially, spatial transformations must be applied identically to both $I$ and $G$ to maintain spatial alignment, whereas pixel-level transformations (such as contrast adjustments or noise injection) are applied only to $I$.
+
+\subsection{Spatial Transformations}
+We heavily utilize affine transformations to simulate variations in camera angle and patient positioning. An affine transformation is a geometric mapping that preserves lines and parallelism but alters lengths and angles. The transformation of a pixel coordinate $(x,y)$ to a new coordinate $(x',y')$ can be expressed via matrix multiplication:
+\begin{equation}
+    \begin{bmatrix} x' \\ y' \\ 1 \end{bmatrix} = 
+    \begin{bmatrix} a_{11} & a_{12} & t_x \\ a_{21} & a_{22} & t_y \\ 0 & 0 & 1 \end{bmatrix}
+    \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+\end{equation}
+Where $t_x, t_y$ govern translation, and $a_{11}, a_{12}, a_{21}, a_{22}$ govern rotation, scaling, and shearing. Specifically, for a rotation by angle $\phi$, the matrix takes the form:
+\begin{equation}
+    R(\phi) = \begin{bmatrix} \cos\phi & -\sin\phi & 0 \\ \sin\phi & \cos\phi & 0 \\ 0 & 0 & 1 \end{bmatrix}
+\end{equation}
+By stochastically sampling $\phi$, scale factors, and translation vectors from uniform distributions, we force the network to become invariant to the absolute position and orientation of the vessels within the frame.
+
+\subsection{Pixel-level Transformations}
+To simulate the varying illumination and sensor noise inherent in clinical environments, we apply several pixel-level perturbations to $I$. 
+
+\textbf{Gaussian Noise:} Additive Gaussian noise simulates sensor noise. A noise matrix $N \sim \mathcal{N}(0, \sigma^2)$ is sampled from a normal distribution with mean 0 and variance $\sigma^2$ and added to the image:
+\begin{equation}
+    I'(x,y) = \text{clip}(I(x,y) + N(x,y), 0, 255)
+\end{equation}
+
+\textbf{Contrast/Brightness Adjustment:} This simulates variations in contrast agent density and illumination intensity. It is defined by the linear transformation:
+\begin{equation}
+    I'(x,y) = \text{clip}(\alpha \cdot I(x,y) + \beta, 0, 255)
+\end{equation}
+where $\alpha \in [0.8, 1.2]$ is a stochastically sampled contrast modifier, and $\beta \in [-20, 20]$ is a stochastically sampled brightness modifier.
+
+\section{Evaluation Metrics Formulation}
+The performance of the segmentation models is quantitatively evaluated using a suite of standard clinical metrics. To define these metrics, we must first establish the four fundamental outcomes of a binary prediction for a specific pixel:
+\begin{itemize}
+    \item \textbf{True Positive (TP):} $P(x,y) \ge \tau$ and $G(x,y) = 1$
+    \item \textbf{True Negative (TN):} $P(x,y) < \tau$ and $G(x,y) = 0$
+    \item \textbf{False Positive (FP):} $P(x,y) \ge \tau$ and $G(x,y) = 0$
+    \item \textbf{False Negative (FN):} $P(x,y) < \tau$ and $G(x,y) = 1$
+\end{itemize}
+where $\tau$ is the binarization threshold (typically set to 0.5). For global metric calculation, $TP, TN, FP,$ and $FN$ represent the sum of these occurrences across all pixels in the image or dataset.
+
+\subsection{Precision and Recall}
+\textbf{Precision} (also known as Positive Predictive Value) measures the proportion of pixels predicted as vessels that are actually vessels. It penalizes the model for over-segmentation (predicting noise as vessels).
+\begin{equation}
+    \text{Precision} = \frac{TP}{TP + FP}
+\end{equation}
+
+\textbf{Recall} (also known as Sensitivity or True Positive Rate) measures the proportion of actual vessel pixels that were correctly identified by the model. It penalizes the model for under-segmentation (missing existing vessels). In medical contexts, high recall is often prioritized, as missing a pathological feature is generally considered more detrimental than investigating a false alarm.
+\begin{equation}
+    \text{Recall} = \frac{TP}{TP + FN}
+\end{equation}
+
+\subsection{Intersection over Union (IoU) / Jaccard Index}
+The Intersection over Union (IoU) is the primary geometric metric for evaluating semantic segmentation. It is defined as the area of overlap between the predicted segmentation and the ground truth divided by the area of union between the predicted segmentation and the ground truth.
+\begin{equation}
+    \text{IoU} = \frac{|P_{binary} \cap G|}{|P_{binary} \cup G|} = \frac{TP}{TP + FP + FN}
+\end{equation}
+IoU ranges from 0 (no overlap) to 1 (perfect overlap). It is an extremely strict metric; a model must perfectly align its predictions with the exact boundaries of the object to achieve an IoU approaching 1.0.
+
+\subsection{Dice Coefficient (F1-Score)}
+The Dice Coefficient is closely related to IoU and is widely used in medical imaging literature. It represents the harmonic mean of Precision and Recall.
+\begin{equation}
+    \text{Dice} = \frac{2 \cdot |P_{binary} \cap G|}{|P_{binary}| + |G|} = \frac{2 \cdot TP}{2 \cdot TP + FP + FN}
+\end{equation}
+While similar to IoU, the Dice Coefficient tends to yield slightly higher numerical values than IoU for the same segmentation quality, as it does not penalize outliers quite as heavily in the denominator. 
+
+\section{Mathematical Formulations of Loss Functions}
+The fundamental challenge of training a neural network for vessel segmentation is defining a differentiable objective function (loss function) that adequately guides the gradient descent process. Because vessel pixels represent a severe minority class in angiograms, standard loss functions are prone to catastrophic failure. To mitigate this, we employ and evaluate advanced hybrid loss formulations.
+
+\subsection{Binary Cross-Entropy (BCE) Loss}
+Binary Cross-Entropy is the standard loss function for binary classification tasks. It operates on a pixel-by-pixel basis, calculating the logarithmic difference between the predicted probability $p_i = P(x_i, y_i)$ and the true label $g_i = G(x_i, y_i)$. For an image with $N$ pixels, the BCE loss is defined as:
+\begin{equation}
+    \mathcal{L}_{BCE} = - \frac{1}{N} \sum_{i=1}^{N} \left[ g_i \log(p_i) + (1 - g_i) \log(1 - p_i) \right]
+\end{equation}
+While BCE is smooth and provides strong gradients when predictions are highly confident but wrong, it treats all pixels equally. In a scenario where 95\% of pixels are background ($g_i = 0$), the second term of the equation dominates the total loss. The network quickly learns to minimize $\mathcal{L}_{BCE}$ simply by predicting $p_i \approx 0$ everywhere, resulting in a model that fails to segment any vessels.
+
+\subsection{Dice Loss}
+To overcome the class imbalance problem of BCE, we utilize the soft, differentiable version of the Dice Coefficient as a loss function. Unlike BCE, which calculates loss pixel-by-pixel, Dice Loss evaluates the regional overlap of the predictions.
+\begin{equation}
+    \mathcal{L}_{Dice} = 1 - \frac{2 \sum_{i=1}^{N} p_i g_i + \epsilon}{\sum_{i=1}^{N} p_i + \sum_{i=1}^{N} g_i + \epsilon}
+\end{equation}
+where $\epsilon$ is a small smoothing constant (e.g., $1e-5$) added to both the numerator and denominator to prevent division by zero when the ground truth mask is entirely empty.
+
+Because $\mathcal{L}_{Dice}$ relies solely on the intersection $\sum p_i g_i$, the overwhelming number of true negative background pixels does not directly contribute to the loss magnitude. The network is forced to focus its optimization efforts exclusively on the foreground structures.
+
+\subsection{Focal Loss}
+Focal Loss \parencite{lin2017focal} represents an alternative mathematical approach to addressing class imbalance. Instead of evaluating regional overlap, Focal Loss introduces a dynamic scaling factor to standard BCE that down-weights the contribution of "easy" examples and focuses training on "hard" examples. Let $p_t$ be the model's estimated probability for the true class:
+\begin{equation}
+    p_t = \begin{cases} 
+        p_i & \text{if } g_i = 1 \\
+        1 - p_i & \text{if } g_i = 0 
+    \end{cases}
+\end{equation}
+Standard BCE can then be rewritten simply as $\mathcal{L}_{BCE} = -\log(p_t)$. Focal Loss modifies this by adding a modulating factor $(1 - p_t)^\gamma$:
+\begin{equation}
+    \mathcal{L}_{Focal} = - \alpha_t (1 - p_t)^\gamma \log(p_t)
+\end{equation}
+where $\gamma \ge 0$ is the tunable focusing parameter, and $\alpha_t \in [0, 1]$ is a static class weighting parameter. As a pixel is confidently classified ($p_t \rightarrow 1$), the modulating factor $(1 - p_t)^\gamma \rightarrow 0$, meaning the pixel contributes very little to the total loss. This prevents the vast number of easily classified background pixels from dominating the gradient update.
+
+\subsection{Hybrid Loss Formulations}
+In practice, neither Dice Loss nor Focal Loss alone is always optimal. Dice Loss provides excellent regional overlap but can struggle with highly uncertain, low-confidence edge pixels. Conversely, BCE or Focal Loss provides strong, stable pixel-level gradients but suffers under extreme imbalance. 
+
+To achieve the best of both paradigms, this thesis investigates the efficacy of hybrid loss functions that linearly combine a region-based loss with a pixel-based loss.
+
+\textbf{Hybrid BCE + Dice Loss:}
+\begin{equation}
+    \mathcal{L}_{BCE+Dice} = \lambda \mathcal{L}_{BCE} + (1 - \lambda) \mathcal{L}_{Dice}
+\end{equation}
+
+\textbf{Hybrid Focal + Dice Loss:}
+\begin{equation}
+    \mathcal{L}_{Focal+Dice} = \lambda \mathcal{L}_{Focal} + (1 - \lambda) \mathcal{L}_{Dice}
+\end{equation}
+where $\lambda \in [0,1]$ is a hyperparameter that balances the contribution of the two loss components. By default, we assign equal weight ($\lambda = 0.5$). These hybrid formulations ensure that the network optimizes for global structural overlap while maintaining sharp, confident probabilistic predictions at the delicate boundaries of the micro-capillaries.

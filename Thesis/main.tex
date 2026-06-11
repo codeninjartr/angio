@@ -1,0 +1,128 @@
+\documentclass[a4paper, 12pt, oneside]{book}
+
+% -------------------------
+% Essential Packages
+% -------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}      % Times New Roman font for standard academic style
+\usepackage{graphicx}      % For images
+\usepackage{amsmath}       % For math environments (align, equations)
+\usepackage{amssymb}       % Math symbols
+\usepackage{geometry}      % For margins
+\usepackage{booktabs}      % For clean tables
+\usepackage{caption}
+\usepackage{subcaption}    % For side-by-side figures
+\usepackage{hyperref}      % For clickable links
+\usepackage{setspace}      % For line spacing
+\usepackage[backend=biber, style=ieee]{biblatex} % Bibliography
+
+% -------------------------
+% Configuration
+% -------------------------
+\geometry{
+    top=1in,
+    bottom=1in,
+    left=1.5in,  % 1.5 inch left margin for binding
+    right=1in
+}
+\setstretch{1.5} % 1.5 line spacing as standard for theses
+
+\addbibresource{references.bib} % Add bibliography file
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+% -------------------------
+% Document Start
+% -------------------------
+\begin{document}
+
+% --- Front Matter ---
+\frontmatter
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+        
+        \Huge
+        \textbf{Automated Angiography Blood Vessel Segmentation and Morphological Analysis using Deep Learning Architectures}
+        
+        \vspace{1.5cm}
+        
+        \Large
+        \textit{A Thesis Submitted in Partial Fulfillment of the Requirements for the Degree of}
+        
+        \vspace{0.5cm}
+        \textbf{Integrated Dual Degree (IDD)}
+        
+        \vspace{2cm}
+        
+        \Large
+        By \\
+        \textbf{Seemant} \\
+        
+        \vspace{2cm}
+        
+        \Large
+        Under the supervision of \\
+        \textbf{Dr. Predeep Paik}
+        
+        \vfill
+        
+        % Optionally add a logo here if available
+        % \includegraphics[width=4cm]{images/iit_bhu_logo.png}
+        
+        \vspace{1cm}
+        
+        \Large
+        Department of [Your Department] \\
+        Indian Institute of Technology (BHU) \\
+        Varanasi, India \\
+        2026
+        
+    \end{center}
+\end{titlepage}
+
+\chapter*{Declaration}
+I declare that this thesis entitled \textit{"Automated Angiography Blood Vessel Segmentation and Morphological Analysis using Deep Learning Architectures"} is the result of my own research work carried out under the supervision of Dr. Predeep Paik. To the best of my knowledge, it does not contain any material previously published by another person, nor material which has been accepted for the award of any other degree or diploma, except where due acknowledgment has been made in the text.
+\vspace{2cm}\\
+\noindent
+Date: \rule{4cm}{0.4pt} \hfill \rule{6cm}{0.4pt}\\
+Place: IIT (BHU), Varanasi \hfill Seemant
+
+\chapter*{Abstract}
+The precise extraction of blood vessels from angiography images is a fundamental requirement for the automated diagnosis of cardiovascular and systemic vascular diseases. Manual segmentation by clinical experts is not only highly subjective but also excessively time-consuming, particularly given the low contrast, class imbalance, and intricate morphological structures characteristic of micro-capillaries. This thesis proposes a highly accurate, robust deep learning methodology for automated vessel segmentation and morphological analysis, leveraging two state-of-the-art semantic segmentation architectures: UNet++ and DeepLabV3+. 
+
+By utilizing nested, dense skip connections, the UNet++ framework effectively bridges the semantic gap between encoder and decoder feature maps, enabling superior multi-scale feature aggregation. Concurrently, the DeepLabV3+ architecture employs Atrous Spatial Pyramid Pooling (ASPP) to capture multi-scale contextual information without degrading spatial resolution. To address the severe class imbalance inherent in vessel pixels versus background, both networks are trained using advanced hybrid loss formulations, specifically Binary Cross-Entropy (BCE) combined with Dice Loss, and Focal Loss combined with Dice Loss. Heavy spatial and pixel-level augmentations are integrated via the Albumentations library to ensure model generalization.
+
+Following semantic segmentation, a rigorous post-processing pipeline based on morphological skeletonization (thinning) is introduced. This algorithm extracts the vessel centerline topology, isolates branch points and end points, and computes the number of distinct connected vessel networks, providing critical quantitative biomarkers for clinical evaluation.
+
+The proposed methodologies were comprehensively evaluated on an angiography dataset of 637 images (500 training, 137 testing). Experimental results demonstrate that both architectures converge reliably and achieve highly competitive segmentation accuracy. Extensive quantitative and qualitative analyses confirm the models' capability to successfully resolve both primary thick vessels and ultra-thin micro-capillaries. Finally, the automated skeletonization approach validates the clinical utility of the pipeline by extracting actionable morphological counts from the predicted masks.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+% --- Main Matter ---
+\mainmatter
+
+\include{chapters/1_Introduction}
+\include{chapters/2_Literature_Review}
+\include{chapters/3_System_Model}
+\include{chapters/4_Methodology}
+\include{chapters/5_Experimental_Design}
+\include{chapters/6_Results_and_Discussion}
+\include{chapters/7_Conclusion}
+
+% --- Back Matter ---
+\backmatter
+
+\printbibliography[heading=bibintoc, title={References}]
+
+\end{document}
