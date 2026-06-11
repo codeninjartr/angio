@@ -41,7 +41,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # ─────────────────────────────────────────────
 # 1. Load Model
 # ─────────────────────────────────────────────
-print("[1/5] Loading model …")
+print("[1/5] Loading model...")
 model = tf.keras.models.load_model(
     MODEL_PATH,
     custom_objects={
@@ -60,21 +60,21 @@ print(f"      Output shape      : {model.output_shape}")
 # ─────────────────────────────────────────────
 # 2. Load Test Data
 # ─────────────────────────────────────────────
-print("\n[2/5] Loading test split (137_rgb_mask) …")
+print("\n[2/5] Loading test split (137_rgb_mask)...")
 X_test, Y_test = load_test_data()
 print(f"      Test samples: {len(X_test)}")
 
 # ─────────────────────────────────────────────
 # 3. Predict
 # ─────────────────────────────────────────────
-print("\n[3/5] Running inference …")
+print("\n[3/5] Running inference...")
 pred_probs = model.predict(X_test, batch_size=4, verbose=1)   # (N, H, W, 1)
 pred_masks = (pred_probs > THRESHOLD).astype(np.uint8)        # binary
 
 # ─────────────────────────────────────────────
 # 4. Post-processing – remove_small_objects
 # ─────────────────────────────────────────────
-print(f"\n[4/5] Post-processing (min_size={MIN_OBJ_SIZE}) …")
+print(f"\n[4/5] Post-processing (min_size={MIN_OBJ_SIZE})...")
 pred_masks_clean = np.zeros_like(pred_masks)
 
 for i, m in enumerate(pred_masks):
@@ -110,18 +110,18 @@ def batch_iou(y_true, y_pred, smooth=1e-6):
 dice_scores = batch_dice(Y_test, pred_masks_clean)
 iou_scores  = batch_iou (Y_test, pred_masks_clean)
 
-print(f"\n── Aggregate Metrics (post-processed) ───")
-print(f"  Mean Dice  : {dice_scores.mean():.4f} ± {dice_scores.std():.4f}")
-print(f"  Mean IoU   : {iou_scores.mean():.4f}  ± {iou_scores.std():.4f}")
+print(f"\n--- Aggregate Metrics (post-processed) ---")
+print(f"  Mean Dice  : {dice_scores.mean():.4f} +/- {dice_scores.std():.4f}")
+print(f"  Mean IoU   : {iou_scores.mean():.4f}  +/- {iou_scores.std():.4f}")
 
 # ─────────────────────────────────────────────
 # 5. Visualisation Grid
 # ─────────────────────────────────────────────
-print(f"\n[5/5] Saving visualisation for {NUM_DISPLAY} samples …")
+print(f"\n[5/5] Saving visualisation for {NUM_DISPLAY} samples...")
 
 n   = min(NUM_DISPLAY, len(X_test))
 fig, axes = plt.subplots(n, 4, figsize=(16, 4 * n))
-fig.suptitle("UNet++  –  Vessel Segmentation Results", fontsize=14, fontweight="bold")
+fig.suptitle("UNet++  -  Vessel Segmentation Results", fontsize=14, fontweight="bold")
 
 col_titles = ["RGB Input", "Ground Truth", "Prediction", "Overlay"]
 
@@ -158,12 +158,12 @@ for i in range(n):
 plt.tight_layout()
 out_path = os.path.join(OUTPUT_DIR, "predictions.png")
 plt.savefig(out_path, dpi=150)
-print(f"      Saved → {out_path}")
+print(f"      Saved -> {out_path}")
 plt.close()
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # 6. Save individual masks as PNG
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 masks_dir = os.path.join(OUTPUT_DIR, "pred_masks")
 os.makedirs(masks_dir, exist_ok=True)
 
@@ -173,5 +173,5 @@ for i, m in enumerate(pred_masks_clean):
         m.squeeze() * 255
     )
 
-print(f"      Binary masks saved → {masks_dir}/")
-print("\n✅ Prediction complete.")
+print(f"      Binary masks saved -> {masks_dir}/")
+print("\n[OK] Prediction complete.")

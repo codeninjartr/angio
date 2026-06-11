@@ -23,11 +23,11 @@ import albumentations as A
 IMG_SIZE = 256       # 256×256 for most GPUs; set to 512 for RTX/A100
 
 # Absolute paths – fixed train / test directories
-TRAIN_RGB_DIR  = r"d:\labdatanew@aniket\500_rgb_mask\RGB"
-TRAIN_MASK_DIR = r"d:\labdatanew@aniket\500_rgb_mask\MASK"
+TRAIN_RGB_DIR  = r"d:\labdatanew_Seemant\500_rgb_mask\RGB"
+TRAIN_MASK_DIR = r"d:\labdatanew_Seemant\500_rgb_mask\MASK"
 
-TEST_RGB_DIR   = r"d:\labdatanew@aniket\137_rgb_mask\RGB"
-TEST_MASK_DIR  = r"d:\labdatanew@aniket\137_rgb_mask\MASK"
+TEST_RGB_DIR   = r"d:\labdatanew_Seemant\137_rgb_mask\RGB"
+TEST_MASK_DIR  = r"d:\labdatanew_Seemant\137_rgb_mask\MASK"
 
 
 # ─────────────────────────────────────────────
