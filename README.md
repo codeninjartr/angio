@@ -152,9 +152,8 @@ To analyze how retinal/angiogenesis blood vessels grow and branch over time, we 
 
 | Time Point | Sample Size (n) | Vessel Networks (Mean ± SD) | Branch Points (Mean ± SD) | End Points (Mean ± SD) |
 | :---: | :---: | :---: | :---: | :---: |
-| **0 hours** | 73 | 11.44 ± 3.98 | 2920.16 ± 908.08 | 50.15 ± 13.46 |
+| **0 hours** | 77 | 11.57 ± 3.96 | 2938.65 ± 896.46 | 50.34 ± 13.24 |
 | **2 hours** | 46 | 11.65 ± 3.73 | 2605.83 ± 921.93 | 48.09 ± 10.21 |
-| **3 hours** | 4 | 14.00 ± 2.55 | 3276.00 ± 548.58 | 53.75 ± 7.53 |
 | **4 hours** | 45 | 12.67 ± 3.13 | 2719.98 ± 846.45 | 48.53 ± 10.88 |
 | **8 hours** | 52 | 11.94 ± 3.21 | 2760.40 ± 806.49 | 47.50 ± 10.43 |
 | **24 hours** | 25 | 13.60 ± 4.34 | 2529.24 ± 820.60 | 51.40 ± 7.38 |

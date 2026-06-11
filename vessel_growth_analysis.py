@@ -140,7 +140,7 @@ def run_analysis():
                     
                 # Decode time point from filename
                 r_filename = os.path.basename(best_path).lower()
-                hr_match = re.search(r'(\d+)hr', r_filename)
+                hr_match = re.search(r'(\d+)\s*h', r_filename)
                 if hr_match:
                     hour = int(hr_match.group(1))
                 else:
