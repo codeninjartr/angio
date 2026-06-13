@@ -278,29 +278,120 @@ def run_analysis():
                 "filename": r["filename"],
                 "concentration": r["concentration"],
                 "hour": r["hour"],
+                "original_path": r["original_path"],
+                "mse": float(r["mse"]),
                 "network_count": feat["network_count"],
                 "branch_points": feat["branch_points"],
                 "end_points": feat["end_points"]
             })
 
+    # ── Biological Replicate-Level Analysis ───────────────────────────────
+    # The 637 dataset images have many-to-one mapping to raw images (multiple
+    # crops match the same original via MSE). We correct this at three levels:
+    #   1. Deduplicate: one entry per unique raw image (lowest MSE match)
+    #   2. Group by biological replicate (egg = unique folder path)
+    #   3. Require 0h baseline per egg (n can only stay equal or decrease)
+
+    # Step 1: Deduplicate — keep only the best MSE match per raw image
+    best_per_raw = {}
+    for res in all_results:
+        key = res["original_path"]
+        if key not in best_per_raw or res["mse"] < best_per_raw[key]["mse"]:
+            best_per_raw[key] = res
+    deduped = list(best_per_raw.values())
+    print(f"\n      Deduplication: {len(all_results)} matched records -> {len(deduped)} unique raw images")
+
+    # Step 2: Identify biological replicates (eggs) by parent directory
+    # e.g. D:\gs\angiogenesis data\SN3\cropped\0.1ug\2\2\ = one egg
+    for res in deduped:
+        res["egg_id"] = os.path.dirname(res["original_path"])
+
+    # Step 3: Only include eggs that have a 0h baseline measurement
+    eggs_with_baseline = set()
+    for res in deduped:
+        if res["hour"] == 0:
+            eggs_with_baseline.add((res["concentration"], res["egg_id"]))
+
+    filtered = [
+        res for res in deduped
+        if (res["concentration"], res["egg_id"]) in eggs_with_baseline
+    ]
+    print(f"      Baseline filter: {len(deduped)} -> {len(filtered)} images (only eggs with 0h baseline)")
+
+    # Step 4: Enforce monotonically non-increasing n across timepoints
+    # For each concentration, at each timepoint only include eggs that were
+    # also present at ALL earlier timepoints. This prevents n from bumping up
+    # if an egg had a missing intermediate image (e.g. 0h, skip 2h, then 4h).
+    target_concs = ["0.1ug", "1ug", "10ug", "control"]
+    timepoints = [0, 2, 4, 8, 24, 32]
+
+    # Build lookup: (conc, egg_id) -> set of available hours
+    egg_hours = defaultdict(set)
+    for res in filtered:
+        egg_hours[(res["concentration"], res["egg_id"])].add(res["hour"])
+
+    # For each conc, determine the eligible egg set at each timepoint
+    eligible_eggs = {}  # (conc, hour) -> set of egg_ids
+    for conc in target_concs:
+        # Start with all eggs that have 0h
+        current_set = {eid for (c, eid), hrs in egg_hours.items()
+                       if c == conc and 0 in hrs}
+        for hr in timepoints:
+            # Shrink: only keep eggs that have data at this timepoint
+            current_set = {eid for eid in current_set
+                           if hr in egg_hours[(conc, eid)]}
+            eligible_eggs[(conc, hr)] = set(current_set)
+
+    # Apply monotonic filter
+    mono_filtered = [
+        res for res in filtered
+        if res["egg_id"] in eligible_eggs.get((res["concentration"], res["hour"]), set())
+    ]
+    print(f"      Monotonic filter: {len(filtered)} -> {len(mono_filtered)} images (n never increases)")
+
+    # Save per-egg detail CSV for full transparency / audit trail
+    detail_csv = os.path.join(OUTPUT_DIR, "per_egg_detail.csv")
+    desired_order = ["0.1ug", "1ug", "10ug", "control"]
+    with open(detail_csv, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "concentration", "egg_id", "hour", "network_count",
+            "branch_points", "end_points", "dataset_image", "original_path", "mse"
+        ])
+        writer.writeheader()
+        for res in sorted(mono_filtered, key=lambda x: (desired_order.index(x["concentration"]), x["egg_id"], x["hour"])):
+            writer.writerow({
+                "concentration": res["concentration"],
+                "egg_id": res["egg_id"],
+                "hour": res["hour"],
+                "network_count": res["network_count"],
+                "branch_points": res["branch_points"],
+                "end_points": res["end_points"],
+                "dataset_image": res["filename"],
+                "original_path": res["original_path"],
+                "mse": f"{res['mse']:.2f}"
+            })
+    print(f"      Saved per-egg audit trail to {detail_csv}")
+
     # Group by concentration and hour
     grouped = defaultdict(lambda: defaultdict(list))
-    for res in all_results:
+    for res in mono_filtered:
         grouped[res["concentration"]][res["hour"]].append(res)
 
     # Calculate summary stats for each concentration and hour
     summary_stats = []
-    target_concs = ["control", "0.1ug", "1ug", "10ug"]
-    
-    print("\n=== Growth Analysis Averages by Concentration ===")
+    target_concs = ["0.1ug", "1ug", "10ug", "control"]
+
+    print("\n=== Vessel Growth Analysis (Biological Replicate Level) ===")
+    print("    n = number of unique eggs with usable images at each timepoint")
     for conc in target_concs:
-        print(f"\nConcentration: {conc.upper()}")
+        n_baseline = len(grouped[conc].get(0, []))
+        print(f"\n  {conc.upper()} (n_0 = {n_baseline} eggs at baseline)")
         for hr in sorted(grouped[conc].keys()):
             samples = grouped[conc][hr]
             nets = [x["network_count"] for x in samples]
             brs = [x["branch_points"] for x in samples]
             eps = [x["end_points"] for x in samples]
-            
+
             summary_stats.append({
                 "concentration": conc,
                 "hour": hr,
@@ -309,18 +400,18 @@ def run_analysis():
                 "br_mean": np.mean(brs), "br_std": np.std(brs),
                 "ep_mean": np.mean(eps), "ep_std": np.std(eps)
             })
-            print(f"  Hour {hr}h (n={len(samples)}):")
-            print(f"    Vessel Networks : {np.mean(nets):.2f} +/- {np.std(nets):.2f}")
-            print(f"    Branch Points   : {np.mean(brs):.2f} +/- {np.std(brs):.2f}")
-            print(f"    Capillary Ends  : {np.mean(eps):.2f} +/- {np.std(eps):.2f}")
+            print(f"    {hr:>2}h (n={len(samples):>2}):  "
+                  f"Networks={np.mean(nets):.2f}+/-{np.std(nets):.2f}  "
+                  f"Branches={np.mean(brs):.2f}+/-{np.std(brs):.2f}  "
+                  f"Endpoints={np.mean(eps):.2f}+/-{np.std(eps):.2f}")
 
     # Save to vessel_growth_data.csv
     growth_csv = os.path.join(OUTPUT_DIR, "vessel_growth_data.csv")
     with open(growth_csv, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
-            "concentration", "hour", "sample_size", 
-            "networks_mean", "networks_std", 
-            "branches_mean", "branches_std", 
+            "concentration", "hour", "n_eggs",
+            "networks_mean", "networks_std",
+            "branches_mean", "branches_std",
             "endpoints_mean", "endpoints_std"
         ])
         writer.writeheader()
@@ -328,7 +419,7 @@ def run_analysis():
             writer.writerow({
                 "concentration": s["concentration"],
                 "hour": f"{s['hour']}h",
-                "sample_size": s["count"],
+                "n_eggs": s["count"],
                 "networks_mean": f"{s['net_mean']:.2f}",
                 "networks_std": f"{s['net_std']:.2f}",
                 "branches_mean": f"{s['br_mean']:.2f}",
@@ -381,7 +472,7 @@ def plot_growth_curves(summary_data):
         ax.set_ylabel(ylabels[i], fontsize=10)
         ax.grid(True, alpha=0.3)
 
-        for conc in ["control", "0.1ug", "1ug", "10ug"]:
+        for conc in ["0.1ug", "1ug", "10ug", "control"]:
             data = sorted(concs_data[conc], key=lambda x: x["hour"])
             if not data:
                 continue
@@ -395,9 +486,9 @@ def plot_growth_curves(summary_data):
                 hours, means, yerr=stds, 
                 fmt='-' + markers[conc], color=colors[conc], 
                 ecolor=colors[conc], elinewidth=1.5, capsize=3, 
-                linewidth=2, label=f"{conc.upper()} (n={sum(d['count'] for d in data)})"
+                linewidth=2, label=f"{conc.upper()} (n\u2080={next((d['count'] for d in data if d['hour'] == 0), '?')} eggs)"
             )
-        
+
         ax.legend(loc="best")
 
     plt.tight_layout()
@@ -408,13 +499,14 @@ def plot_growth_curves(summary_data):
 
 # ── Helper: plot publication-quality growth table ────────────────────────────
 def plot_growth_table(summary_data):
-    sorted_data = sorted(summary_data, key=lambda x: (x["concentration"], x["hour"]))
+    desired_order = ["0.1ug", "1ug", "10ug", "control"]
+    sorted_data = sorted(summary_data, key=lambda x: (desired_order.index(x["concentration"]), x["hour"]))
     
     fig, ax = plt.subplots(figsize=(14, 8))
     ax.axis("off")
     ax.axis("tight")
     
-    columns = ["Concentration", "Time Point", "Sample Size (n)", "Vessel Networks (Mean ± SD)", "Branch Points (Mean ± SD)", "End Points (Mean ± SD)"]
+    columns = ["Concentration", "Time Point", "n (eggs)", "Vessel Networks (Mean \u00b1 SD)", "Branch Points (Mean \u00b1 SD)", "End Points (Mean \u00b1 SD)"]
     
     cell_text = []
     row_colors = []
