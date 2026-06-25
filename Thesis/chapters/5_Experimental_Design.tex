@@ -78,3 +78,21 @@ Beyond pixel-level semantic metrics, the pipeline is evaluated on its ability to
     \item \textbf{End Points Count:} The number of detected terminal capillaries.
 \end{itemize}
 These morphological counts, logged to the \texttt{vessel\_counts.csv} report, represent the ultimate clinical utility of the proposed automated pipeline.
+
+\section{CAM Assay Biological Experiment Design}
+To evaluate the biological relevance of the automated segmentation and skeletonization pipeline, a controlled \textit{in vivo} experiment was conducted using the Chorioallantoic Membrane (CAM) assay on fertilized chicken embryos. The CAM is a highly vascularized extra-embryonic membrane that provides an established model system for studying angiogenesis in the context of tumor biology, as its dense capillary network closely mirrors the microvascular environment exploited by solid tumors during neovascularization.
+
+\subsection{Experimental Groups and Vehicle}
+Four experimental groups were established to investigate the dose-dependent effects of the compound on vascular morphology:
+\begin{itemize}
+    \item \textbf{0.1\,$\mu$g Group:} Compound dissolved in 0.9\% normal saline at a concentration of 0.1\,$\mu$g.
+    \item \textbf{1\,$\mu$g Group:} Compound dissolved in 0.9\% normal saline at a concentration of 1\,$\mu$g.
+    \item \textbf{10\,$\mu$g Group:} Compound dissolved in 0.9\% normal saline at a concentration of 10\,$\mu$g.
+    \item \textbf{Vehicle Control:} 0.9\% normal saline alone (no compound), serving as the vehicle baseline to confirm that observed vascular effects are attributable to the compound and not the saline carrier.
+\end{itemize}
+
+\subsection{Timepoints and Image Acquisition}
+The CAM vasculature was imaged at five timepoints post-application: 0h (baseline, prior to treatment), 2h, 4h, 8h, and 24h. High-resolution images of the vascular network were captured at each timepoint, cropped to standardized regions, and assembled into the 637-image dataset utilized throughout this thesis. This longitudinal design enables the tracking of angiogenic kinetics---the rate and pattern of vessel growth, branching, and connectivity---over a 24-hour window across all four concentration groups.
+
+\subsection{Cancer Relevance}
+The rationale for this experimental design is grounded in the observation that tumor angiogenesis---the recruitment of new blood vessels by malignant tumors---is a critical hallmark of cancer progression. Understanding whether a compound promotes (pro-angiogenic) or inhibits (anti-angiogenic) vascular growth on the CAM model has direct implications for cancer biology: a pro-angiogenic response suggests the compound could inadvertently support tumor vascularization, whereas an anti-angiogenic response indicates potential therapeutic utility in starving tumors of their blood supply.

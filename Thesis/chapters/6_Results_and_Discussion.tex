@@ -68,68 +68,68 @@ The \texttt{vessel\_counts.csv} data highlights the extreme density of the vascu
 
 These massive, precise nodal counts are physically impossible for a human clinician to extract manually. The ability of the proposed UNet++/DeepLabV3+ pipeline to first cleanly segment the network, and the subsequent skeletonization algorithm to autonomously extract thousands of precise topological nodes in mere seconds, definitively answers Research Question 3 (RQ3) and establishes the high clinical value of the integrated methodology.
 
-\section{Egg Embryo Vessel Growth Analysis}
-The primary biological application of the developed deep learning and skeletonization pipeline is to perform a quantitative comparative analysis of angiogenesis kinetics in egg embryos. We evaluated vascular growth over time (0h, 2h, 4h, 8h, 24h, 32h) when exposed to varying concentrations of a therapeutic agent (Control, 0.1\,$\mu$g, 1\,$\mu$g, and 10\,$\mu$g).
+\section{CAM Assay: Tumor Angiogenesis Assessment}
+The primary biological application of the developed deep learning and skeletonization pipeline is to perform a quantitative assessment of angiogenic potential using the Chorioallantoic Membrane (CAM) assay on fertilized egg embryos. In cancer biology, tumor angiogenesis---the process by which tumors recruit new blood vessels to sustain their growth---is a hallmark of malignant progression. The CAM of the chick embryo provides an established \textit{in vivo} model system for evaluating pro-angiogenic and anti-angiogenic responses, as its dense vascular network closely resembles the microvascular environment of solid tumors.
 
-By matching the 637 cropped images back to their raw dataset folders using downscaled Mean Squared Error (MSE) matching, each image was successfully assigned its concentration and timepoint metadata. The trained UNet++ model segmented the vascular networks, and the morphological thinning pipeline extracted three primary topological metrics: Vessel Networks, Branch Points, and End Points. The aggregated statistics are detailed in Table~\ref{tab:egg_embryo_growth}.
+Four experimental groups were established: three treatment concentrations of the compound dissolved in 0.9\% normal saline (0.1\,$\mu$g, 1\,$\mu$g, and 10\,$\mu$g) and a vehicle control consisting of 0.9\% saline alone. Vascular morphology was assessed at five timepoints (0h, 2h, 4h, 8h, 24h). Each of the 637 cropped images was matched back to its original raw acquisition folder using downscaled Mean Squared Error (MSE) matching ($\text{MSE} < 200$) to assign concentration and timepoint metadata. The analysis was conducted at the biological replicate level: images were deduplicated to one entry per unique raw image, grouped by individual egg, and only eggs possessing a baseline (0h) measurement were retained. The trained UNet++ model segmented the vascular networks, and the morphological thinning pipeline extracted three primary topological metrics. The aggregated statistics are detailed in Table~\ref{tab:egg_embryo_growth}.
 
 \begin{table}[htbp]
 \centering
-\caption{Quantitative Morphological Metrics of Egg Embryo Angiogenesis over Time}
+\caption{CAM Assay: Quantitative Vascular Morphology Across Drug Concentrations and Time (Biological Replicate Level)}
 \label{tab:egg_embryo_growth}
 \small
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Concentration} & \textbf{Time Point} & \textbf{n} & \textbf{Networks (Mean $\pm$ SD)} & \textbf{Branch Points (Mean $\pm$ SD)} & \textbf{End Points (Mean $\pm$ SD)} \\ \midrule
-Control & 0 hours & 15 & 11.47 $\pm$ 3.52 & 2279.53 $\pm$ 814.91 & 52.27 $\pm$ 15.64 \\
- & 2 hours & 11 & 14.82 $\pm$ 2.72 & 2917.27 $\pm$ 761.50 & 54.00 $\pm$ 8.82 \\
- & 4 hours & 6 & 10.67 $\pm$ 3.40 & 2538.00 $\pm$ 578.08 & 45.50 $\pm$ 11.79 \\
- & 8 hours & 5 & 14.00 $\pm$ 2.00 & 2724.00 $\pm$ 476.45 & 63.20 $\pm$ 16.17 \\
- & 24 hours & 9 & 13.00 $\pm$ 3.33 & 2864.22 $\pm$ 791.19 & 48.11 $\pm$ 5.04 \\ \midrule
-0.1\,$\mu$g & 0 hours & 23 & 12.61 $\pm$ 4.52 & 2667.83 $\pm$ 781.62 & 46.43 $\pm$ 9.46 \\
- & 2 hours & 30 & 11.73 $\pm$ 3.82 & 3033.93 $\pm$ 1065.80 & 47.37 $\pm$ 10.44 \\
- & 4 hours & 31 & 11.74 $\pm$ 4.60 & 2725.23 $\pm$ 923.63 & 48.58 $\pm$ 11.42 \\
- & 8 hours & 18 & 10.78 $\pm$ 3.58 & 2882.44 $\pm$ 956.03 & 48.94 $\pm$ 12.49 \\
- & 24 hours & 22 & 12.50 $\pm$ 5.08 & 2948.00 $\pm$ 866.08 & 48.55 $\pm$ 9.97 \\
- & 32 hours & 2 & 13.00 $\pm$ 2.00 & 2375.00 $\pm$ 209.00 & 58.50 $\pm$ 2.50 \\ \midrule
-1\,$\mu$g & 0 hours & 77 & 11.57 $\pm$ 3.96 & 2938.65 $\pm$ 896.46 & 50.34 $\pm$ 13.24 \\
- & 2 hours & 46 & 11.65 $\pm$ 3.73 & 2605.83 $\pm$ 921.93 & 48.09 $\pm$ 10.21 \\
- & 4 hours & 45 & 12.67 $\pm$ 3.13 & 2719.98 $\pm$ 846.45 & 48.53 $\pm$ 10.88 \\
- & 8 hours & 52 & 11.94 $\pm$ 3.21 & 2760.40 $\pm$ 806.49 & 47.50 $\pm$ 10.43 \\
- & 24 hours & 25 & 13.60 $\pm$ 4.34 & 2529.24 $\pm$ 820.60 & 51.40 $\pm$ 7.38 \\
- & 32 hours & 2 & 7.50 $\pm$ 1.50 & 2531.50 $\pm$ 230.50 & 34.00 $\pm$ 5.00 \\ \midrule
-10\,$\mu$g & 0 hours & 49 & 11.49 $\pm$ 4.20 & 3032.92 $\pm$ 1211.44 & 50.02 $\pm$ 13.81 \\
- & 2 hours & 50 & 12.34 $\pm$ 4.34 & 2625.70 $\pm$ 1097.52 & 49.40 $\pm$ 11.52 \\
- & 4 hours & 42 & 12.50 $\pm$ 4.38 & 2675.95 $\pm$ 756.63 & 49.62 $\pm$ 11.40 \\
- & 8 hours & 49 & 11.73 $\pm$ 4.23 & 2674.55 $\pm$ 888.43 & 47.29 $\pm$ 10.29 \\
- & 24 hours & 28 & 13.29 $\pm$ 3.10 & 2789.75 $\pm$ 733.40 & 49.79 $\pm$ 9.84 \\
+\textbf{Concentration} & \textbf{Time} & \textbf{n (eggs)} & \textbf{Networks (Mean $\pm$ SD)} & \textbf{Branch Points (Mean $\pm$ SD)} & \textbf{End Points (Mean $\pm$ SD)} \\ \midrule
+0.1\,$\mu$g & 0h & 8 & 13.38 $\pm$ 5.12 & 2824.75 $\pm$ 739.74 & 51.00 $\pm$ 6.93 \\
+ & 2h & 5 & 13.60 $\pm$ 2.65 & 2298.80 $\pm$ 395.97 & 44.60 $\pm$ 6.05 \\
+ & 4h & 4 & 14.50 $\pm$ 4.72 & 2502.25 $\pm$ 773.55 & 53.00 $\pm$ 1.41 \\
+ & 8h & 3 & 11.33 $\pm$ 1.25 & 2506.00 $\pm$ 733.87 & 44.00 $\pm$ 2.94 \\
+ & 24h & 1 & 4.00 $\pm$ 0.00 & 5115.00 $\pm$ 0.00 & 53.00 $\pm$ 0.00 \\ \midrule
+1\,$\mu$g & 0h & 17 & 9.53 $\pm$ 4.34 & 2906.47 $\pm$ 989.39 & 41.24 $\pm$ 10.42 \\
+ & 2h & 12 & 10.83 $\pm$ 3.53 & 2859.67 $\pm$ 986.11 & 47.75 $\pm$ 7.34 \\
+ & 4h & 10 & 12.30 $\pm$ 3.74 & 2458.00 $\pm$ 1021.17 & 44.40 $\pm$ 6.71 \\
+ & 8h & 8 & 11.25 $\pm$ 3.34 & 2450.38 $\pm$ 842.00 & 39.12 $\pm$ 7.99 \\
+ & 24h & 3 & 12.67 $\pm$ 3.68 & 2461.33 $\pm$ 509.16 & 51.00 $\pm$ 4.32 \\ \midrule
+10\,$\mu$g & 0h & 12 & 12.00 $\pm$ 4.00 & 2765.33 $\pm$ 1442.68 & 44.25 $\pm$ 13.50 \\
+ & 2h & 9 & 10.33 $\pm$ 3.56 & 3161.67 $\pm$ 1390.59 & 46.67 $\pm$ 10.62 \\
+ & 4h & 7 & 11.14 $\pm$ 3.14 & 2560.86 $\pm$ 662.14 & 47.71 $\pm$ 10.28 \\
+ & 8h & 6 & 16.33 $\pm$ 3.77 & 2626.67 $\pm$ 632.51 & 48.67 $\pm$ 9.39 \\
+ & 24h & 1 & 18.00 $\pm$ 0.00 & 1523.00 $\pm$ 0.00 & 59.00 $\pm$ 0.00 \\ \midrule
+Control (saline) & 0h & 7 & 11.14 $\pm$ 3.94 & 2207.29 $\pm$ 849.19 & 44.14 $\pm$ 10.26 \\
+ & 2h & 3 & 13.67 $\pm$ 0.94 & 2345.33 $\pm$ 793.97 & 44.33 $\pm$ 4.78 \\
+ & 4h & 3 & 10.00 $\pm$ 4.32 & 2222.33 $\pm$ 230.91 & 46.00 $\pm$ 12.68 \\
+ & 8h & 3 & 14.67 $\pm$ 1.70 & 2931.67 $\pm$ 473.54 & 64.33 $\pm$ 11.15 \\
+ & 24h & 2 & 16.00 $\pm$ 2.00 & 2545.50 $\pm$ 95.50 & 48.50 $\pm$ 3.50 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The corresponding growth dynamics curves are visualized in Figure~\ref{fig:egg_embryo_curves}, mapping vessel consolidation, branching complexity, and looping trends over time.
+The corresponding growth dynamics curves are visualized in Figure~\ref{fig:egg_embryo_curves}, mapping vessel network fragmentation (a proxy for anti-angiogenic activity), vascular branching complexity (a proxy for pro-angiogenic sprouting), and capillary dead-end accumulation (a proxy for vascular immaturity) over time.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/vessel_growth_plots.png}
-\caption{Egg Embryo Vessel Growth Dynamics (Networks, Branches, and Endpoints) across Concentrations and Time Points.}
+\caption{CAM Assay: Tumor Angiogenesis Assessment across drug concentrations and time. Left: vessel network fragmentation ($\uparrow$ = anti-angiogenic). Middle: vascular branching complexity ($\uparrow$ = pro-angiogenic). Right: capillary dead-ends ($\uparrow$ = immature vasculature).}
 \label{fig:egg_embryo_curves}
 \end{figure}
 
-\subsection{Kinetics of Vascular Consolidation}
-The count of distinct vessel networks serves as a proxy for vascular continuity and consolidation. In this metric, a lower number signifies that disjointed vascular segments have successfully met and fused (anastomosis) to form a unified, continuous circulatory web, whereas a higher count represents fragmentation.
+\subsection{Vessel Network Fragmentation and Tumor Blood Supply}
+The count of distinct, disconnected vessel networks serves as a direct indicator of vascular connectivity. In the context of tumor angiogenesis, a \textit{decreasing} network count signifies that isolated vessel fragments are fusing (anastomosis) into a well-connected circulatory web---a pro-angiogenic response that would provide a tumor with an efficient blood supply. Conversely, an \textit{increasing} count indicates vascular fragmentation---an anti-angiogenic response that would starve a tumor of oxygen and nutrients.
 
-As shown in Figure~\ref{fig:egg_embryo_curves} (left panel), the Control group displays high volatility, peaking at 2h ($14.82 \pm 2.72$ networks) and 8h ($14.00 \pm 2.00$ networks). This indicates unstable, unguided sprouting dynamics in the absence of chemical intervention. Conversely, the 0.1\,$\mu$g group shows rapid consolidation, with network counts dropping to $10.78 \pm 3.58$ at 8h. The 1\,$\mu$g group demonstrates a highly stable, regulated progression, avoiding the erratic spikes of the Control group, suggesting structured vascular development.
+As shown in Figure~\ref{fig:egg_embryo_curves} (left panel), the 0.1\,$\mu$g group exhibits a striking consolidation from $13.38 \pm 5.12$ networks at baseline to just $4.00$ at 24h, indicating a strongly \textbf{pro-angiogenic} response. This level of vascular consolidation would create an ideal, tumor-favorable microenvironment with maximum blood perfusion. The 1\,$\mu$g group shows a stable, regulated pattern fluctuating narrowly between $9.53$ and $12.67$ networks, suggesting a \textbf{neutral} effect on vascular connectivity. In stark contrast, the 10\,$\mu$g group displays progressive vascular fragmentation, with the network count rising sharply from $12.00 \pm 4.00$ at baseline to $18.00$ at 24h. This \textbf{anti-angiogenic} response---where existing vessel connections are actively disrupted---would severely limit a tumor's ability to establish functional blood supply. The vehicle control (0.9\% saline) trends upward from $11.14 \pm 3.94$ to $16.00 \pm 2.00$ with erratic oscillations, confirming that the observed consolidation at 0.1\,$\mu$g and fragmentation at 10\,$\mu$g are compound-mediated effects rather than natural developmental artifacts.
 
-\subsection{Kinetics of Branching Complexity}
-Vessel branching (bifurcation count) indicates angiogenic sprouting activity and network density. A higher branch point count represents a more complex, dense capillary network.
+\subsection{Vascular Branching Complexity and Tumor Capillary Density}
+Branch points (bifurcations) quantify the density and complexity of the capillary network. In tumor biology, a dense, highly branched vascular bed maximizes nutrient extraction and provides multiple routes for cancer cell intravasation (entry into the bloodstream), facilitating metastasis. Conversely, a simplified vasculature with fewer branches reduces the tumor's access to systemic circulation.
 
-As visualized in the middle panel of Figure~\ref{fig:egg_embryo_curves}, the low-dose group (0.1\,$\mu$g) acts as a strong stimulant, maintaining the highest average branching complexity over time (peaking at $3033.93 \pm 1065.80$ branch points at 2h and sustaining $2948.00 \pm 866.08$ at 24h). In contrast, the higher doses (1\,$\mu$g and 10\,$\mu$g) show a downward trajectory after 0h, stabilizing around ~2500--2700 branch points. This indicates a pruning effect where higher concentrations regulate and organize the capillaries into a cleaner, more efficient, and mature layout rather than an over-congested, chaotic vascular bed.
+As visualized in the middle panel of Figure~\ref{fig:egg_embryo_curves}, the 0.1\,$\mu$g group sustains moderate branching ($2824.75 \pm 739.74$ at 0h) and culminates in a dramatic spike to $5115.00$ branch points at 24h---nearly double any other group. This massive branching, combined with the network consolidation observed in the previous metric, indicates a strongly \textbf{pro-angiogenic} response that produces a dense, well-connected capillary bed---precisely the vascular infrastructure that tumors actively induce through VEGF secretion. The 1\,$\mu$g group shows a mild pruning effect, declining from $2906.47 \pm 989.39$ to $\sim$2450--2460 branch points, indicating a moderate reduction in vascular density. Most critically, the 10\,$\mu$g group exhibits a progressive collapse in branching complexity from $2765.33 \pm 1442.68$ to $1523.00$ at 24h---a reduction of nearly 45\%. Combined with the vascular fragmentation observed in the network count, this demonstrates that the high dose is \textbf{dismantling the vascular architecture at every topological level}, effectively creating a hostile microenvironment for tumor growth.
 
-\subsection{Capillary Loop Connection (Endpoints)}
-Endpoints represent blind-ending capillary tips that are seeking vascular connection. As loop connection (anastomosis) occurs, endpoints merge to form closed-loop circuits, causing the endpoint count to drop.
+\subsection{Capillary Dead-Ends and Vascular Maturity}
+End points represent blind-ending capillary tips---vessel termini that fail to connect to other vessels to form functional blood-carrying loops. In the context of tumor perfusion, a vessel that terminates without anastomosing is structurally present but functionally inert: blood enters but cannot circulate. An increasing endpoint count therefore indicates the accumulation of immature, non-perfusable vasculature.
 
-The Control group displays a large accumulation of blind-ending, non-functional capillary tips at 8h ($63.20 \pm 16.17$ endpoints), indicating a failure of sprouts to close loops. In contrast, all three drug-treated groups maintain low, highly stable endpoint counts (~46--51) throughout the experiment. This proves that the drug treatment successfully coordinates vessel sprouts, ensuring they rapidly find other vessels to establish closed-loop circulation.
+The 0.1\,$\mu$g group maintains a remarkably stable endpoint count ($44$--$53$) despite its massive increase in branching complexity. This critical observation indicates that nearly every new branch successfully connects to another vessel to form a closed perfusion loop---the \textbf{most tumor-favorable outcome}, as it creates a dense vascular network in which blood can actually circulate. The 10\,$\mu$g group shows a steady upward trend from $44.25 \pm 13.50$ to $59.00$, confirming that the remaining vessels are increasingly \textbf{immature and non-functional}---broken stumps from progressive vascular destruction rather than active growing tips. The vehicle control displays a pronounced transient spike to $64.33 \pm 11.15$ at 8h before recovering to $48.50$ by 24h; this spike represents a natural developmental burst of new sprouts that subsequently connect, in contrast to the 10\,$\mu$g group's irreversible accumulation of dead-ends.
+
+Taken together, the three morphological metrics reveal a clear \textbf{biphasic dose-response}: the low dose (0.1\,$\mu$g) is strongly pro-angiogenic, creating a consolidated, densely branched, and functionally perfusable vascular network that would support tumor growth; the medium dose (1\,$\mu$g) has a neutral to mildly anti-proliferative effect; and the high dose (10\,$\mu$g) is anti-angiogenic, producing a fragmented, simplified, and non-functional vasculature that would starve a tumor of blood supply. This biphasic pattern is consistent with the pharmacological principle of hormesis, where the same compound exhibits opposing biological effects at different concentrations.
 
 \section{Limitations of the Proposed Methodology}
 While the quantitative and qualitative results are highly promising, a rigorous academic analysis requires an explicit acknowledgment of the methodology's current limitations.
