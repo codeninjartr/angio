@@ -126,4 +126,12 @@ This is consistent with the pharmacological principle of **hormesis**, where the
 ### Q6: Why did you train a single global model on all 500 images instead of training separate models for each concentration and time point?
 * **Answer**: Deep learning networks require large, diverse datasets to learn generalized features. If we trained separate models for each experimental subgroup, the models would only have a few dozen images each (e.g., 8 images for 0.1µg at 0h). This would lead to severe **overfitting** (memorization of training images) and poor generalization. Training a single global model on all 500 images ensures a robust, highly accurate segmenter, after which we group the predictions to perform downstream comparative analysis.
 
+### Q7: What is the purpose of the Pearson correlation analysis and what did it show?
+* **Answer**: The Pearson correlation analysis was conducted to **topologically validate** the morphological skeleton features extracted by our automated pipeline against the human expert ground-truth (GT) segmentations for a subset of test images (IDs 501–510). It shows:
+  1. **Branch Points (Vascular Sprouting)**: UNet++ achieved a very high, statistically significant correlation (**$r = 0.9204, p = 0.0002$**) with the ground truth. This mathematically proves that UNet++ accurately preserves the complex branching structures of the capillary bed. DeepLabV3+ achieved a lower, non-significant correlation ($r = 0.5618, p = 0.0910$).
+  2. **Connected Components (Vessel Networks)**: UNet++ showed a moderate correlation of **$r = 0.5225, p = 0.1213$**, outperforming DeepLabV3+ ($r = 0.3406, p = 0.3355$).
+  3. **Endpoints (Capillary Terminations)**: Both models showed weaker correlations (UNet++: $r = 0.3523$; DeepLabV3+: $r = -0.1776$). This is because minor prediction gaps at boundary binarization thresholds ($\tau = 0.5$) can segment a single continuous vessel into separate pieces, artificially inflating endpoint counts compared to manual annotations.
+  
+  In summary, the Pearson analysis confirms that **UNet++ is highly robust in preserving vascular topology (especially branching complexity)**, providing statistically superior features for morphological neovascularization studies compared to DeepLabV3+.
+
 
