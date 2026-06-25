@@ -21,7 +21,7 @@ from skimage.measure import label
 import tensorflow as tf
 
 # ── Config ──────────────────────────────────────────────────────────────────
-IMAGE_IDS   = [501, 502, 503, 504, 505, 506, 507, 508, 509, 510]
+IMAGE_IDS   = list(range(501, 638))
 IMG_SIZE    = (256, 256)
 THRESHOLD   = 0.5
 RGB_DIR     = r"d:\labdatanew_Seemant\137_rgb_mask\RGB"

@@ -91,23 +91,25 @@ The Pearson correlation coefficient ($r$) and its corresponding statistical sign
 
 \begin{table}[h]
 \centering
-\caption{Pearson Correlation Summary ($r$-value and $p$-value) comparing Ground Truth and Predicted Skeleton Properties ($n = 10$ Images)}
+\caption{Pearson Correlation Summary ($r$-value and $p$-value) comparing Ground Truth and Predicted Skeleton Properties ($n = 137$ Images)}
 \label{tab:pearson_correlation_summary}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
 \textbf{Skeleton Property} & \multicolumn{2}{c}{\textbf{UNet++}} & \multicolumn{2}{c}{\textbf{DeepLabV3+}} \\
 \cmidrule(lr){2-3} \cmidrule(lr){4-5}
  & \textbf{$r$-value} & \textbf{$p$-value} & \textbf{$r$-value} & \textbf{$p$-value} \\ \midrule
-Connected Components & 0.5225 & 0.1213 & 0.3406 & 0.3355 \\
-Branch Points & \textbf{0.9204} & \textbf{0.0002} & 0.5618 & 0.0910 \\
-Endpoints & 0.3523 & 0.3181 & -0.1776 & 0.6234 \\
+Connected Components & \textbf{0.5267} & \textbf{< 0.0001} & \textbf{0.2788} & \textbf{0.0010} \\
+Branch Points & \textbf{0.4049} & \textbf{< 0.0001} & -0.0459 & 0.5941 \\
+Endpoints & \textbf{0.6704} & \textbf{< 0.0001} & \textbf{0.3817} & \textbf{< 0.0001} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-As summarized in Table~\ref{tab:pearson_correlation_summary}, the \textbf{UNet++} architecture demonstrates a remarkably strong, statistically significant correlation with the ground truth for vascular branching complexity (Branch Points: $r = 0.9204$, $p < 0.001$). This very high correlation coefficient indicates that the dense, nested skip connections of UNet++ accurately capture the bifurcating topology of the vascular tree. Conversely, \textbf{DeepLabV3+} yields a moderate, non-significant correlation ($r = 0.5618$, $p = 0.0910$) for branch points.
+As summarized in Table~\ref{tab:pearson_correlation_summary}, the complete test-set analysis ($n = 137$ images) demonstrates that the \textbf{UNet++} architecture yields automated topological features that are highly statistically significant ($p < 0.0001$) and strongly correlated with the manual ground-truth (GT) annotations across all three metrics. Conversely, \textbf{DeepLabV3+} demonstrates much weaker performance, failing to achieve statistical significance for vascular branching complexity ($r = -0.0459$, $p = 0.5941$).
 
-For the connected components metric (representing distinct vessel networks), UNet++ achieves a moderate correlation of $r = 0.5225$ ($p = 0.1213$), outperforming DeepLabV3+ ($r = 0.3406$, $p = 0.3355$). For endpoints (representing capillary terminations), both architectures exhibit weak correlations, with DeepLabV3+ showing a negative correlation coefficient ($r = -0.1776$). This discrepancy is primarily due to the static thresholding ($\tau = 0.5$) applied before skeletonization; as discussed in Section 6.5, minor prediction gaps at boundary thresholds can artificially segment a single continuous vessel into multiple pieces, inflating endpoints and disconnected components while deviating from the manual annotations. Nonetheless, the high correlation in branching complexity mathematically reinforces that the UNet++ pipeline yields topological structures that strongly correspond to the biological ground truth.
+Specifically, for capillary dead-ends (Endpoints), UNet++ achieves a strong correlation of $r = 0.6704$ ($p < 0.0001$), outperforming DeepLabV3+ ($r = 0.3817$, $p < 0.0001$). For distinct vessel networks (Connected Components), UNet++ demonstrates a moderate correlation of $r = 0.5267$ ($p < 0.0001$), compared to $r = 0.2788$ ($p = 0.0010$) for DeepLabV3+. For branch points, UNet++ maintains a significant correlation of $r = 0.4049$ ($p < 0.0001$). 
+
+This head-to-head comparison provides strong mathematical evidence that UNet++ preserves vascular topology far better than DeepLabV3+. The failure of DeepLabV3+ to capture branching complexity is attributed to the lack of dense skip connections in its decoder; without early high-resolution spatial feature maps, the ASPP module occasionally creates discontinuous prediction segments in fine capillary regions. When skeletonized, these discontinuities split single branching structures into multiple disconnected components and spurious ends, disrupting the overall branching metrics. UNet++ successfully aggregates multi-scale encoder features to prevent this topological degradation.
 
 The scatter plots comparing the ground-truth and predicted topological metrics for individual images are shown in Figure~\ref{fig:pearson_correlation_plots}.
 

@@ -43,8 +43,10 @@ col_labels = [
     "DLV3+\nConn.", "DLV3+\nBranch", "DLV3+\nEndpt"
 ]
 
+# Only show first 10 rows to keep it readable
+display_len = min(10, len(image_ids))
 table_data = []
-for i in range(len(image_ids)):
+for i in range(display_len):
     table_data.append([
         image_ids[i],
         gt_cc[i], gt_br[i], gt_ep[i],
@@ -56,7 +58,7 @@ fig, ax = plt.subplots(figsize=(16, 6))
 ax.axis('off')
 fig.suptitle(
     "Skeleton Topological Properties: Ground Truth vs Predicted Masks\n"
-    "(Connected Components, Branch Points, Endpoints per Image)",
+    "(Connected Components, Branch Points, Endpoints - Showing First 10 of 137 Test Samples)",
     fontsize=14, fontweight='bold', y=0.97
 )
 
@@ -82,7 +84,7 @@ up_color   = '#e3f2fd'  # light blue
 dl_color   = '#fff3e0'  # light orange
 id_color   = '#f5f5f5'  # light grey
 
-for i in range(1, len(image_ids) + 1):
+for i in range(1, display_len + 1):
     table[i, 0].set_facecolor(id_color)
     for j in [1, 2, 3]:
         table[i, j].set_facecolor(gt_color)
@@ -140,7 +142,7 @@ fig, ax = plt.subplots(figsize=(14, 4))
 ax.axis('off')
 fig.suptitle(
     "Pearson Correlation Coefficient Summary\n"
-    "Ground Truth vs Predicted Skeleton Properties (n=10 images)",
+    "Ground Truth vs Predicted Skeleton Properties (n=137 images)",
     fontsize=14, fontweight='bold', y=0.95
 )
 
