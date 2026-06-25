@@ -442,7 +442,7 @@ def plot_growth_curves(summary_data):
         concs_data[s["concentration"]].append(s)
 
     fig, axes = plt.subplots(1, 3, figsize=(20, 6))
-    fig.suptitle("Egg Embryo Vessel Growth Dynamics Across Concentrations & Hours", fontsize=15, fontweight="bold")
+    fig.suptitle("CAM Assay: Tumor Angiogenesis Assessment Across Drug Concentrations & Time", fontsize=15, fontweight="bold")
 
     colors = {
         "control": "#2c3e50",
@@ -458,11 +458,11 @@ def plot_growth_curves(summary_data):
     }
 
     titles = [
-        "Vessel Networks Count (Lower is more consolidated)",
-        "Bifurcations / Branch Points (Higher is more branched)",
-        "Capillary Terminations / End Points"
+        "Vessel Network Fragmentation\n(↑ = Anti-angiogenic / Tumor-starving)",
+        "Vascular Branching Complexity\n(↑ = Pro-angiogenic / Tumor-feeding)",
+        "Capillary Dead-Ends\n(↑ = Immature vasculature / Poor perfusion)"
     ]
-    ylabels = ["Average Networks Count", "Average Branch Points", "Average End Points"]
+    ylabels = ["Avg. Disconnected Networks", "Avg. Branch Points", "Avg. End Points"]
     keys = ["net", "br", "ep"]
 
     for i, key in enumerate(keys):
@@ -542,7 +542,7 @@ def plot_growth_table(summary_data):
         else:
             cell.set_facecolor(row_colors[row - 1])
                 
-    plt.title("Multi-Concentration Growth Analysis Summary (Egg Embryo Vessel Kinetics)", y=0.98, fontsize=13, fontweight="bold")
+    plt.title("CAM Assay: Vascular Feature Summary Across Drug Concentrations", y=0.98, fontsize=13, fontweight="bold")
     plt.tight_layout()
     
     out_table = os.path.join(OUTPUT_DIR, "vessel_growth_table.png")
