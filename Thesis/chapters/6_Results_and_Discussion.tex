@@ -84,6 +84,40 @@ The \texttt{vessel\_counts.csv} data highlights the extreme density of the vascu
 
 These massive, precise nodal counts are physically impossible for a human clinician to extract manually. The ability of the proposed UNet++/DeepLabV3+ pipeline to first cleanly segment the network, and the subsequent skeletonization algorithm to autonomously extract thousands of precise topological nodes in mere seconds, definitively answers Research Question 3 (RQ3) and establishes the high clinical value of the integrated methodology.
 
+\subsection{Topological Validation via Pearson Correlation}
+To rigorously validate that the morphological features extracted from the automated segmentations accurately represent the true anatomical topology, a Pearson correlation analysis was conducted. We compared the skeleton properties (Connected Components, Branch Points, and Endpoints) extracted from the manual expert ground-truth (GT) masks against the properties extracted from predictions of both the UNet++ and DeepLabV3+ architectures across a subset of 10 independent test images (IDs 501–510).
+
+The Pearson correlation coefficient ($r$) and its corresponding statistical significance ($p$-value) were calculated for each metric. The summary of these correlation metrics is detailed in Table~\ref{tab:pearson_correlation_summary}.
+
+\begin{table}[h]
+\centering
+\caption{Pearson Correlation Summary ($r$-value and $p$-value) comparing Ground Truth and Predicted Skeleton Properties ($n = 10$ Images)}
+\label{tab:pearson_correlation_summary}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Skeleton Property} & \multicolumn{2}{c}{\textbf{UNet++}} & \multicolumn{2}{c}{\textbf{DeepLabV3+}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & \textbf{$r$-value} & \textbf{$p$-value} & \textbf{$r$-value} & \textbf{$p$-value} \\ \midrule
+Connected Components & 0.5225 & 0.1213 & 0.3406 & 0.3355 \\
+Branch Points & \textbf{0.9204} & \textbf{0.0002} & 0.5618 & 0.0910 \\
+Endpoints & 0.3523 & 0.3181 & -0.1776 & 0.6234 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+As summarized in Table~\ref{tab:pearson_correlation_summary}, the \textbf{UNet++} architecture demonstrates a remarkably strong, statistically significant correlation with the ground truth for vascular branching complexity (Branch Points: $r = 0.9204$, $p < 0.001$). This very high correlation coefficient indicates that the dense, nested skip connections of UNet++ accurately capture the bifurcating topology of the vascular tree. Conversely, \textbf{DeepLabV3+} yields a moderate, non-significant correlation ($r = 0.5618$, $p = 0.0910$) for branch points.
+
+For the connected components metric (representing distinct vessel networks), UNet++ achieves a moderate correlation of $r = 0.5225$ ($p = 0.1213$), outperforming DeepLabV3+ ($r = 0.3406$, $p = 0.3355$). For endpoints (representing capillary terminations), both architectures exhibit weak correlations, with DeepLabV3+ showing a negative correlation coefficient ($r = -0.1776$). This discrepancy is primarily due to the static thresholding ($\tau = 0.5$) applied before skeletonization; as discussed in Section 6.5, minor prediction gaps at boundary thresholds can artificially segment a single continuous vessel into multiple pieces, inflating endpoints and disconnected components while deviating from the manual annotations. Nonetheless, the high correlation in branching complexity mathematically reinforces that the UNet++ pipeline yields topological structures that strongly correspond to the biological ground truth.
+
+The scatter plots comparing the ground-truth and predicted topological metrics for individual images are shown in Figure~\ref{fig:pearson_correlation_plots}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/pearson_correlation_plots.png}
+\caption{Pearson correlation scatter plots comparing manual ground-truth (GT) skeleton properties against automated predictions from UNet++ (top row) and DeepLabV3+ (bottom row) across test images 501–510. The dashed lines show the linear regression fits.}
+\label{fig:pearson_correlation_plots}
+\end{figure}
+
 \section{CAM Assay: Tumor Angiogenesis Assessment}
 The primary biological application of the developed deep learning and skeletonization pipeline is to perform a quantitative assessment of angiogenic potential using the Chorioallantoic Membrane (CAM) assay on fertilized egg embryos. In cancer biology, tumor angiogenesis---the process by which tumors recruit new blood vessels to sustain their growth---is a hallmark of malignant progression. The CAM of the chick embryo provides an established \textit{in vivo} model system for evaluating pro-angiogenic and anti-angiogenic responses, as its dense vascular network closely resembles the microvascular environment of solid tumors.
 

@@ -125,6 +125,16 @@ def generate_pdf():
             pdf.cell(0, 10, 'Figure: Inference Output (Image 501)', 0, 1, 'L')
             if os.path.exists('images/single_prediction_501.png'):
                 pdf.image('images/single_prediction_501.png', w=180)
+
+            pdf.add_page()
+            pdf.cell(0, 10, 'Figure: CAM Assay Growth Dynamics', 0, 1, 'L')
+            if os.path.exists('images/vessel_growth_plots.png'):
+                pdf.image('images/vessel_growth_plots.png', w=180)
+
+            pdf.add_page()
+            pdf.cell(0, 10, 'Figure: Topological Validation (Pearson Correlation)', 0, 1, 'L')
+            if os.path.exists('images/pearson_correlation_plots.png'):
+                pdf.image('images/pearson_correlation_plots.png', w=180)
     
     pdf.output("Final_Thesis_Document.pdf")
     print("PDF Generated!")
