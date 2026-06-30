@@ -1,0 +1,125 @@
+concentration,egg_id,hour,network_count,branch_points,end_points,dataset_image,original_path,mse
+0.1ug,D:\gs\angiogenesis data\SN1\cropped\0.1ug\1\2,0,11,3939,40,566_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\0.1ug\1\2\0hr.tif,72.86
+0.1ug,D:\gs\angiogenesis data\SN1\cropped\0.1ug\2\2,0,10,2269,48,83_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\0.1ug\2\2\0hr.tif,57.76
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\1\2,0,26,1588,63,9_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\1\2\0hr.tif,57.60
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1,0,15,2576,54,523_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\0hr.tif,51.76
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1,2,13,2520,42,238_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\2hr.tif,58.50
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder,0,9,3845,52,229_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder\0hr.tif,68.93
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder,2,18,1612,54,107_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder\2hr.tif,56.80
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder,4,19,1591,55,99_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder\4hr.tif,56.90
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder,8,10,2220,40,61_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\1\New folder\8hr.tif,58.92
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2,0,11,2437,43,574_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2\0hr.tif,49.18
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2,2,15,2512,48,552_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2\2hr.tif,53.40
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2,4,14,3084,53,504_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2\4hr.tif,59.79
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2,8,11,3513,47,571_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\2\2\8hr.tif,54.77
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\3\2,0,11,2997,51,544_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\3\2\0hr.tif,69.46
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\3\2,2,11,2120,43,435_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\3\2\2hr.tif,69.49
+0.1ug,D:\gs\angiogenesis data\SN2\cropped\0.1ug\3\2,4,7,3432,53,528_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\0.1ug\3\2\4hr.tif,58.57
+0.1ug,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1,0,14,2947,57,76_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1\0hr.tif,63.57
+0.1ug,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1,2,11,2730,36,353_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1\2hr.tif,57.67
+0.1ug,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1,4,18,1902,51,296_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1\4hr.tif,65.91
+0.1ug,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1,8,13,1785,45,313_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1\8hr.tif,62.12
+0.1ug,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1,24,4,5115,53,334_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\0.1ug\3\1\24hr.tif,54.06
+1ug,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1,0,8,1225,33,20_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1\0hr.tif,55.36
+1ug,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1,2,8,3000,32,352_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1\2hr.tif,45.70
+1ug,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1,4,17,1469,52,243_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1\4hr.tif,64.11
+1ug,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1,8,15,2282,47,411_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\1ug\2\1\8hr.tif,54.40
+1ug,D:\gs\angiogenesis data\SN1\cropped\1ug\3,0,3,2804,26,138_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\1ug\3\0hr.tif,86.63
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\1\1,0,12,2039,47,602_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\1\1\0hr.tif,63.03
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\2\1,0,16,1987,45,438_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\2\1\0hr.tif,55.05
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\2\1,2,13,2042,54,426_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\2\1\2hr.tif,70.77
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\2\1,4,10,2144,42,168_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\2\1\4hr.tif,59.52
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\2\2,0,10,4133,55,425_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\2\2\0hr.tif,55.41
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2,0,11,3263,43,628_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2\0h.tif,50.62
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2,2,15,2278,56,157_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2\2hr.tif,49.62
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2,4,12,4071,46,624_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2\4hr.tif,49.47
+1ug,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2,8,15,2767,52,161_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\1ug\3\2\8hr.tif,61.02
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\1\2,0,8,2454,32,218_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\1\2\0hr.tif,55.29
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\1\2,2,8,2266,40,224_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\1\2\2hr.tif,58.97
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\1\2,4,10,2251,48,226_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\1\2\4hr.tif,55.19
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2,0,10,3090,46,165_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2\0hr.tif,53.31
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2,2,15,2005,48,123_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2\2hr.tif,60.33
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2,4,17,1413,53,338_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2\4hr.tif,61.43
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2,8,12,1857,43,323_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2\8hr.tif,52.92
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2,24,13,1865,47,174_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\2\2\24hr.tif,53.43
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\3\2,0,17,1594,54,41_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\3\2\0hr.tif,55.32
+1ug,D:\gs\angiogenesis data\SN3\cropped\1ug\3\2,2,10,2682,47,40_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\1ug\3\2\2hr.tif,55.03
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1,0,19,2112,60,516_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1\0hr.tif,55.75
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1,2,11,4522,58,499_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1\2hr.tif,55.25
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1,4,14,3593,45,261_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1\4hr.tif,48.49
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1,8,11,2677,34,193_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1\8hr.tif,53.33
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1,24,8,3109,49,141_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\1\24hr.tif,57.38
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2,0,7,2771,28,183_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2\0hr.tif,48.23
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2,2,9,3019,42,493_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2\2hr.tif,49.60
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2,4,9,3418,45,124_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2\4hr.tif,62.34
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2,8,13,2041,38,130_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\2\8hr.tif,68.26
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3,0,5,4821,29,16_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3\0hr.tif,36.55
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3,2,18,925,55,186_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3\2hr.tif,54.21
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3,4,18,1023,48,162_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3\4hr.tif,50.71
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3,8,7,1984,25,311_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\1\3\8hr.tif,55.09
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1,0,6,3679,31,358_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1\0hr.tif,38.14
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1,2,7,3853,45,11_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1\2hr.tif,39.30
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1,4,9,1791,32,185_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1\4hr.tif,38.33
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1,8,5,4439,33,19_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1\8hr.tif,42.74
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1,24,17,2410,57,285_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\1\24hr.tif,52.22
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2,0,6,4059,49,394_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2\0hr.tif,42.62
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2,2,10,3871,44,491_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2\2hr.tif,63.65
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2,4,7,3407,33,179_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2\4hr.tif,56.96
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2,8,12,1556,41,153_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\2\2\8hr.tif,61.38
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\3\1,0,8,4044,38,187_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\3\1\0hr.tif,64.83
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\3\1,0,11,1973,52,73_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\3\1\0hr.tif (green).tif,76.49
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\3\2,0,5,3362,33,391_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\3\2\0hr.tif,65.60
+1ug,D:\gs\angiogenesis data\SN4\cropped\1ug\3\2,2,6,3853,52,87_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\1ug\3\2\2hr.tif,44.79
+10ug,D:\gs\angiogenesis data\SN1\cropped\10ug\2\1,0,15,2819,42,586_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\10ug\2\1\0hr.tif,60.51
+10ug,D:\gs\angiogenesis data\SN1\cropped\10ug\2\2,0,7,960,27,213_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\10ug\2\2\0hr.tif,57.21
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1,0,11,4860,59,427_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1\0hr.tif,56.80
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1,2,4,3658,31,354_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1\2hr.tif,48.48
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1,4,14,3902,56,515_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1\4hr.tif,47.85
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1,8,18,3091,53,485_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\1\8hr.tif,63.84
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2,0,7,2381,27,197_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2\0hr.tif,43.15
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2,2,14,2385,42,44_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2\2hr.tif,46.50
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2,4,9,1877,37,131_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2\4hr.tif,53.38
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2,8,21,1558,58,182_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\1\2\8hr.tif,61.91
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1,0,11,3238,36,530_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1\0hr was dead at 32 infacted.tif,56.70
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1,2,12,1582,41,305_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1\2hr.tif,56.43
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1,4,14,2129,53,180_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1\4hr.tif,54.35
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1,8,16,2169,41,120_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\2\1\8hr.tif,60.53
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\2\2,0,9,2076,30,139_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\2\2\0hr.tif,56.58
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\2\2,2,9,4996,52,253_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\2\2\2hr.tif,47.91
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1,0,15,2543,50,108_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1\0hr.tif,72.02
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1,2,11,1598,44,82_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1\2hr.tif,60.13
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1,4,8,3116,52,474_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1\4hr.tif,49.89
+10ug,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1,8,12,2612,39,359_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\10ug\3\1\8hr.tif,45.27
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1,0,6,6057,73,347_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1\0hr.tif,53.51
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1,2,8,5408,66,339_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1\2hr.tif,46.04
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1,4,9,2051,40,327_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1\4hr.tif,54.31
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1,8,20,3521,62,344_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1\8hr.tif,60.71
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1,24,18,1523,59,101_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\2\1\24hr.tif,71.26
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\1,0,14,1432,43,59_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\1\0 hr.tif,57.41
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\1,2,10,4220,57,451_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\1\2hr.tif,64.84
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\1,4,16,2501,63,70_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\1\4hr.tif,60.67
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2,0,18,2167,56,119_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2\0hr.tif,56.24
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2,2,17,1751,53,184_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2\2hr.tif,55.09
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2,4,8,2350,33,329_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2\4hr.tif,49.10
+10ug,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2,8,11,2809,39,513_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\10ug\3\2\8hr.tif,62.82
+10ug,D:\gs\angiogenesis data\SN4\cropped\10 ug\1\1,0,13,1086,37,303_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\10 ug\1\1\0hr.tif,54.54
+10ug,D:\gs\angiogenesis data\SN4\cropped\10 ug\2\1,0,18,3565,51,486_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\10 ug\2\1\0hr.tif,67.29
+10ug,D:\gs\angiogenesis data\SN4\cropped\10 ug\2\1,2,8,2857,34,492_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\10 ug\2\1\2hr.tif,58.91
+control,D:\gs\angiogenesis data\SN1\cropped\control\1,0,8,726,31,214_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\control\1\0hr.tif,59.07
+control,D:\gs\angiogenesis data\SN1\cropped\control\2,0,8,2267,34,351_RGB.jpg,D:\gs\angiogenesis data\SN1\cropped\control\2\0hr.tif,44.98
+control,D:\gs\angiogenesis data\SN2\cropped\control\1,0,17,1704,47,170_RGB.jpg,D:\gs\angiogenesis data\SN2\cropped\control\1\0hr.tif,55.63
+control,D:\gs\angiogenesis data\SN3\cropped\control\1,0,8,2023,47,29_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\control\1\0hr.tif,69.15
+control,D:\gs\angiogenesis data\SN3\cropped\control\2,0,17,2316,56,257_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\control\2\0hr.tif,68.97
+control,D:\gs\angiogenesis data\SN3\cropped\control\2,2,15,1313,42,221_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\control\2\2hr.tif,55.22
+control,D:\gs\angiogenesis data\SN3\cropped\control\2,4,14,1928,47,225_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\control\2\4hr.tif,61.00
+control,D:\gs\angiogenesis data\SN3\cropped\control\2,8,14,3540,79,481_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\control\2\8hr.tif,62.73
+control,D:\gs\angiogenesis data\SN3\cropped\control\2,24,14,2450,45,171_RGB.jpg,D:\gs\angiogenesis data\SN3\cropped\control\2\24hr.tif,57.85
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\1,0,8,2683,35,325_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\1\0hr.tif,45.61
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\1,2,13,2479,51,167_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\1\2 hr.tif,61.67
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\1,4,12,2492,61,345_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\1\4 hr.tif,48.64
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\1,8,17,2385,52,377_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\1\8 hr.tif,60.26
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\1,24,18,2641,52,508_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\1\24 hr.tif,73.90
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\2,0,12,3732,59,532_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\2\0hr1.tif,51.52
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\2,2,13,3244,40,100_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\2\2hr1.tif,60.63
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\2,4,4,2247,30,199_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\2\4hr1.tif,47.35
+control,D:\gs\angiogenesis data\SN4\cropped\cropped control\2,8,13,2870,62,534_RGB.jpg,D:\gs\angiogenesis data\SN4\cropped\cropped control\2\8hr1.tif,54.93

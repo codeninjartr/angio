@@ -3,9 +3,13 @@ __pycache__/
 *.pyc
 *.keras
 *.h5
-outputs/
 tb_logs/
-*.pdf
-*.png
-*.jpg
 *.log
+*.pdf
+
+# Allow outputs directory but exclude large binary files
+!outputs/
+!outputs/**
+
+# Exclude zip files
+*.zip
