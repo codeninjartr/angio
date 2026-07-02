@@ -486,7 +486,7 @@ def plot_growth_curves(summary_data):
                 hours, means, yerr=stds, 
                 fmt='-' + markers[conc], color=colors[conc], 
                 ecolor=colors[conc], elinewidth=1.5, capsize=3, 
-                linewidth=2, label=f"{conc.upper()} (n\u2080={next((d['count'] for d in data if d['hour'] == 0), '?')} eggs)"
+                linewidth=2, label=f"{conc.upper()}"
             )
 
         ax.legend(loc="best")
