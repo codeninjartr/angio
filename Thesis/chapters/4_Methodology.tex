@@ -32,6 +32,72 @@ To leverage transfer learning, we graft the dense UNet++ decoder onto an ImageNe
 
 The output feature maps from the ResNet50 blocks (e.g., \texttt{conv1\_relu}, \texttt{conv2\_block3\_out}, etc.) are projected via $3 \times 3$ convolutions to a uniform channel depth (128 channels). These projected multi-scale features serve as the $j=0$ column of the UNet++ grid, seamlessly feeding into the dense skip pathways described previously.
 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.0cm and 1.0cm,
+        enc/.style={rectangle, draw=blue!70, fill=blue!15, minimum width=1.0cm, minimum height=0.7cm, align=center, font=\footnotesize, rounded corners=2pt},
+        dec/.style={rectangle, draw=green!70!black, fill=green!15, minimum width=1.0cm, minimum height=0.7cm, align=center, font=\footnotesize, rounded corners=2pt},
+        skip/.style={rectangle, draw=orange!70, fill=orange!15, minimum width=1.0cm, minimum height=0.7cm, align=center, font=\footnotesize, rounded corners=2pt},
+        arr/.style={-{Stealth[length=2mm]}, thick},
+        darr/.style={-{Stealth[length=2mm]}, thick, dashed}
+    ]
+        % Encoder column (j=0)
+        \node[enc] (x00) {$X^{0,0}$};
+        \node[enc, below=of x00] (x10) {$X^{1,0}$};
+        \node[enc, below=of x10] (x20) {$X^{2,0}$};
+        \node[enc, below=of x20] (x30) {$X^{3,0}$};
+        \node[enc, below=of x30] (x40) {$X^{4,0}$};
+
+        % Dense skip nodes
+        \node[skip, right=of x00] (x01) {$X^{0,1}$};
+        \node[skip, right=of x10] (x11) {$X^{1,1}$};
+        \node[skip, right=of x20] (x21) {$X^{2,1}$};
+        \node[skip, right=of x30] (x31) {$X^{3,1}$};
+
+        \node[skip, right=of x01] (x02) {$X^{0,2}$};
+        \node[skip, right=of x11] (x12) {$X^{1,2}$};
+        \node[skip, right=of x21] (x22) {$X^{2,2}$};
+
+        \node[skip, right=of x02] (x03) {$X^{0,3}$};
+        \node[skip, right=of x12] (x13) {$X^{1,3}$};
+
+        \node[dec, right=of x03] (x04) {$X^{0,4}$};
+
+        % Encoder downsampling arrows
+        \draw[arr, blue!60] (x00) -- (x10);
+        \draw[arr, blue!60] (x10) -- (x20);
+        \draw[arr, blue!60] (x20) -- (x30);
+        \draw[arr, blue!60] (x30) -- (x40);
+
+        % Horizontal skip connections
+        \draw[arr] (x00) -- (x01);
+        \draw[arr] (x10) -- (x11);
+        \draw[arr] (x20) -- (x21);
+        \draw[arr] (x30) -- (x31);
+        \draw[arr] (x01) -- (x02);
+        \draw[arr] (x11) -- (x12);
+        \draw[arr] (x21) -- (x22);
+        \draw[arr] (x02) -- (x03);
+        \draw[arr] (x12) -- (x13);
+        \draw[arr] (x03) -- (x04);
+
+        % Upsampling diagonal arrows
+        \draw[arr, red!60] (x10) -- (x01);
+        \draw[arr, red!60] (x20) -- (x11);
+        \draw[arr, red!60] (x30) -- (x21);
+        \draw[arr, red!60] (x40) -- (x31);
+        \draw[arr, red!60] (x11) -- (x02);
+        \draw[arr, red!60] (x21) -- (x12);
+        \draw[arr, red!60] (x31) -- (x22);
+        \draw[arr, red!60] (x12) -- (x03);
+        \draw[arr, red!60] (x22) -- (x13);
+        \draw[arr, red!60] (x13) -- (x04);
+    \end{tikzpicture}
+    \caption{Architectural diagram of the UNet++ dense skip pathway topology. Blue nodes represent the encoder column ($j=0$), orange nodes represent intermediate dense skip nodes, and the green node represents the final decoder output ($X^{0,4}$). Blue arrows denote max-pooling downsampling, black arrows denote horizontal dense concatenation, and red arrows denote bilinear upsampling paths.}
+    \label{fig:unetpp_architecture}
+\end{figure}
+
 \section{Architecture 2: The DeepLabV3+ Framework}
 The second architecture implemented is DeepLabV3+, which approaches the multi-scale challenge not through dense decoder pathways, but through advanced atrous (dilated) convolutions within the encoder bottleneck. 
 
@@ -61,6 +127,31 @@ The ASPP output tensor is initially up-sampled by a factor of 4 (via bilinear in
 
 These low-level spatial features are then concatenated with the up-sampled ASPP features. This fused tensor undergoes a series of two $3 \times 3$ convolutions to refine object boundaries. Finally, the tensor is up-sampled by another factor of 4 to match the original $256 \times 256$ input resolution. A final $1 \times 1$ convolution with a Sigmoid activation function maps the dense tensor to a binary probability map $P \in [0,1]^{256 \times 256}$.
 
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.5cm and 0.8cm,
+        block/.style={rectangle, draw=black!60, fill=#1, text width=2.4cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\footnotesize},
+        arr/.style={-{Stealth[length=2.5mm]}, thick, draw=black!50}
+    ]
+        \node[block=blue!12] (input) {Input Image\\$256 \times 256$};
+        \node[block=blue!20, right=of input] (backbone) {ResNet50\\Backbone};
+        \node[block=red!15, right=of backbone] (aspp) {ASPP Module\\$(r=6,12,18)$};
+        \node[block=green!15, below=1.2cm of backbone] (lowlevel) {Low-Level\\Features ($64^2$)};
+        \node[block=orange!15, right=of aspp] (concat) {Concatenate\\\& Refine};
+        \node[block=purple!12, right=of concat] (output) {Output Mask\\$256 \times 256$};
+
+        \draw[arr] (input) -- (backbone);
+        \draw[arr] (backbone) -- (aspp);
+        \draw[arr] (aspp) -- (concat);
+        \draw[arr] (backbone) |- (lowlevel);
+        \draw[arr] (lowlevel) -| (concat);
+        \draw[arr] (concat) -- (output);
+    \end{tikzpicture}
+    \caption{Architectural diagram of the DeepLabV3+ framework. The ResNet50 encoder extracts multi-scale features, which are processed by the ASPP module with parallel atrous convolutions at dilation rates of 6, 12, and 18. The decoder fuses the ASPP output with low-level encoder features to refine spatial boundaries before producing the final segmentation mask.}
+    \label{fig:deeplabv3p_architecture}
+\end{figure}
+
 \section{Post-Processing: Topological Skeletonization}
 The primary objective of automated angiography analysis is not merely to generate a visual mask, but to extract actionable clinical numbers. To transition from pixel-level predictions to morphological metrics, we designed a downstream post-processing pipeline centered on mathematical skeletonization.
 
@@ -86,3 +177,49 @@ To extract morphological features, we traverse the skeleton graph $S$ using a $3
 \end{itemize}
 
 By removing the branch points from the skeleton graph $S$, the network decomposes into a set of disjoint, isolated vessel segments. Conversely, by applying a standard Connected Component Labeling (CCL) algorithm to the full skeleton $S$, we can accurately count the number of \textit{distinct, non-contiguous vessel networks} present in the angiogram. These quantitative features (Network Count, Branch Point Count, End Point Count) are automatically logged to a CSV report (e.g., \texttt{vessel\_counts.csv}), providing clinicians with a robust, objective numerical analysis of the patient's vascular health.
+
+\section{Training Algorithm}
+The complete training procedure for both architectures is formalized in Algorithm~\ref{alg:training}.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Training set $\mathcal{D}_{train} = \{(I_k, G_k)\}_{k=1}^{500}$, Validation set $\mathcal{D}_{val}$}
+\KwOut{Trained model weights $\theta^*$}
+\textbf{Initialize:} Model $\mathcal{F}_\theta$, Adam optimizer ($\alpha_0 = 10^{-4}$), patience $p=10$\;
+\For{epoch $= 1$ \KwTo $50$}{
+    \ForEach{mini-batch $(I_b, G_b)$ from $\mathcal{D}_{train}$}{
+        $(I'_b, G'_b) \leftarrow \texttt{Augment}(I_b, G_b)$\;
+        $P_b \leftarrow \mathcal{F}_\theta(I'_b)$\;
+        $\mathcal{L} \leftarrow \mathcal{L}_{BCE+Dice}(P_b, G'_b)$\;
+        $\theta \leftarrow \theta - \alpha \nabla_\theta \mathcal{L}$\;
+    }
+    Compute $\mathcal{L}_{val}$ on $\mathcal{D}_{val}$\;
+    \If{$\mathcal{L}_{val}$ improved}{Save $\theta$ as best weights\;}
+    \If{no improvement for $p$ epochs}{\textbf{break} (Early Stopping)\;}
+    \If{no improvement for $5$ epochs}{$\alpha \leftarrow 0.2 \cdot \alpha$ (ReduceLROnPlateau)\;}
+}
+Restore best weights $\theta^*$\;
+\caption{Training Procedure for Vessel Segmentation Models}
+\label{alg:training}
+\end{algorithm}
+
+\section{Skeletonization and Feature Extraction Algorithm}
+The post-processing morphological analysis pipeline is formalized in Algorithm~\ref{alg:skeleton}.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Predicted probability map $P \in [0,1]^{H \times W}$}
+\KwOut{Network count $N_c$, Branch points $B_p$, End points $E_p$}
+$M \leftarrow \texttt{Threshold}(P, \tau=0.5)$\;
+$S \leftarrow \texttt{ZhangSuenThinning}(M)$ \tcp*{Reduce to 1-pixel skeleton}
+$B_p \leftarrow 0$, $E_p \leftarrow 0$\;
+\ForEach{foreground pixel $p_i \in S$}{
+    $n \leftarrow |N_8(p_i)|$ \tcp*{Count 8-connected neighbors}
+    \If{$n = 1$}{$E_p \leftarrow E_p + 1$ \tcp*{End point}}
+    \If{$n \geq 3$}{$B_p \leftarrow B_p + 1$ \tcp*{Branch point}}
+}
+$N_c \leftarrow \texttt{ConnectedComponents}(S)$\;
+\Return{$N_c, B_p, E_p$}\;
+\caption{Morphological Skeletonization and Feature Extraction}
+\label{alg:skeleton}
+\end{algorithm}

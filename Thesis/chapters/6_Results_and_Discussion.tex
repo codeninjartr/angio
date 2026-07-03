@@ -20,6 +20,21 @@ Conversely, the \textbf{UNet++ (Scratch)} architecture exhibited a much slower, 
 \label{fig:training_curves}
 \end{figure}
 
+The detailed, per-architecture training dynamics for both models are presented in Figures~\ref{fig:unetpp_training_detail} and \ref{fig:deeplabv3p_training_detail}. These comprehensive 2$\times$2 training curve panels visualize the evolution of loss, Dice coefficient, IoU, and additional architecture-specific metrics across training epochs.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{images/unetpp_training_curve.png}
+\caption{Detailed UNet++ (ResNet50) training dynamics. Top-left: Training and validation loss (BCE + Dice). Top-right: Dice coefficient progression. Bottom-left: Intersection over Union (IoU). Bottom-right: Precision and Recall curves, showing balanced optimization without class collapse.}
+\label{fig:unetpp_training_detail}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{images/deeplabv3plus_training_curve.png}
+\caption{Detailed DeepLabV3+ training dynamics. Top-left: Training and validation loss (BCE + Dice). Top-right: Dice coefficient progression. Bottom-left: Intersection over Union (IoU). Bottom-right: Pixel-wise accuracy, demonstrating rapid early convergence due to the pre-trained ResNet50 backbone.}
+\label{fig:deeplabv3p_training_detail}
+\end{figure}
 
 \subsection{Comparative Analysis of IoU and Dice Metrics}
 The final quantitative metrics evaluated on the 137-image testing set unequivocally demonstrate the high efficacy of both advanced architectures.
@@ -189,3 +204,30 @@ While the quantitative and qualitative results are highly promising, a rigorous 
 The primary limitation involves the binarization thresholding step prior to skeletonization. We currently utilize a static threshold ($\tau = 0.5$). While highly effective for the confident predictions of the primary vessels, this static threshold can inadvertently break the continuity of ultra-thin capillaries whose predicted probabilities hover closely around $0.45 - 0.55$. When a continuous vessel is thresholded into a dashed line, the skeletonization algorithm falsely interprets each dash as a distinct network, artificially inflating the "Connected Networks Count" and introducing spurious "End Points." 
 
 Future iterations of this pipeline must investigate adaptive, hysteresis-based thresholding algorithms (similar to the Canny edge detector logic) that track the probability ridge-lines to preserve the connectivity of low-confidence micro-capillaries prior to morphological thinning.
+
+\section{Statistical Validation: Spearman Correlation and Paired t-Tests}
+To provide additional statistical rigor beyond the Pearson analysis, two complementary statistical methods were employed.
+
+\subsection{Spearman Rank Correlation}
+While the Pearson correlation coefficient measures linear relationships, the Spearman rank correlation coefficient ($\rho$) assesses monotonic relationships without assuming normality of the underlying data distribution. This is particularly important for morphological counts (e.g., branch points, connected components), which may not follow a Gaussian distribution across the test set.
+
+The Spearman correlation heatmaps (Figure~\ref{fig:spearman_heatmaps}) confirm the directional consistency of the Pearson analysis: UNet++ predictions maintain strong monotonic agreement with ground-truth topological features, while DeepLabV3+ exhibits weaker rank-order preservation, particularly for branch point counts.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{images/spearman_correlation_heatmaps.png}
+\caption{Spearman rank correlation heatmaps comparing ground-truth and predicted skeleton properties for UNet++ and DeepLabV3+. Warm colors indicate strong positive monotonic correlation. The results confirm the superiority of UNet++ in preserving vascular topology.}
+\label{fig:spearman_heatmaps}
+\end{figure}
+
+\subsection{Paired Statistical Testing}
+To test whether the differences in extracted morphological features between the ground truth and the model predictions are statistically significant, paired $t$-tests were conducted for each metric. The null hypothesis ($H_0$) states that there is no significant difference between the ground-truth and the predicted morphological counts.
+
+The box plot distributions (Figure~\ref{fig:ttest_boxplots}) visually illustrate the spread and central tendency of the predicted versus ground-truth morphological features, providing an intuitive understanding of the prediction accuracy and variance for both architectures.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{images/statistical_ttest_boxplots.png}
+\caption{Box plot distributions comparing ground-truth and model-predicted morphological features (Connected Components, Branch Points, Endpoints) for both UNet++ and DeepLabV3+. The plots illustrate the distributional overlap between ground-truth annotations and automated predictions, with UNet++ demonstrating closer distributional alignment.}
+\label{fig:ttest_boxplots}
+\end{figure}

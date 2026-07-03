@@ -50,6 +50,33 @@ Due to the significant memory footprint of the dense skip pathways in UNet++ and
 
 The maximum number of training \textbf{Epochs} was set to 50. To prevent overfitting on the training set, an \textbf{EarlyStopping} callback was implemented. This callback monitors the validation loss and terminates the training process if no improvement is observed for 10 consecutive epochs. Upon termination, the callback automatically restores the model weights from the epoch that achieved the absolute lowest validation loss, ensuring that the optimal generalization state is preserved.
 
+The complete hyperparameter configuration is summarized in Table~\ref{tab:hyperparameters} for quick reference.
+
+\begin{table}[H]
+\centering
+\caption{Summary of Hyperparameter Configuration for Both Architectures}
+\label{tab:hyperparameters}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Hyperparameter} & \textbf{UNet++} & \textbf{DeepLabV3+} \\ \midrule
+Input Resolution & $256 \times 256$ & $256 \times 256$ \\
+Backbone Encoder & ResNet50 (frozen first 80 layers) & ResNet50 (frozen first 80 layers) \\
+Loss Function & BCE + Dice Loss & BCE + Dice Loss \\
+Optimizer & Adam & Adam \\
+Initial Learning Rate ($\alpha_0$) & $1 \times 10^{-4}$ & $1 \times 10^{-4}$ \\
+LR Schedule & ReduceLROnPlateau & ReduceLROnPlateau \\
+LR Decay Factor & 0.2 & 0.2 \\
+LR Patience & 5 epochs & 5 epochs \\
+Minimum LR & $1 \times 10^{-6}$ & $1 \times 10^{-6}$ \\
+Batch Size & 4 & 4 \\
+Maximum Epochs & 50 & 50 \\
+Early Stopping Patience & 10 epochs & 10 epochs \\
+Augmentation Library & Albumentations & Albumentations \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
 \section{Evaluation Baselines and Metrics}
 To rigorously quantify the performance of the proposed methodologies, the experiments were structured to evaluate multiple architectural configurations.
 

@@ -8,6 +8,25 @@ Despite the high fidelity of modern angiographic imaging modalities, the extract
 
 Traditionally, the segmentation of blood vessels has been performed manually by highly trained clinicians and radiologists. However, manual annotation is a fundamentally flawed approach in the context of modern, high-throughput clinical environments. It is exceedingly labor-intensive, taking hours to precisely annotate a single high-resolution angiogram. Furthermore, manual segmentation is highly subjective and prone to inter-observer and intra-observer variability. The cognitive fatigue associated with tracing complex, tortuous, and often overlapping vascular structures inevitably leads to human error. Consequently, the development of fully automated, highly precise, and computationally efficient methods for blood vessel segmentation is not merely an academic pursuit but an urgent clinical necessity.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/sample_rgb_501.jpg}
+        \caption{Raw RGB angiography image}
+        \label{fig:sample_rgb}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/sample_mask_501.jpg}
+        \caption{Corresponding binary ground truth mask}
+        \label{fig:sample_mask}
+    \end{subfigure}
+    \caption{Representative example from the CAM angiography dataset. (a) The raw RGB image of a chorioallantoic membrane (CAM) captured under a stereozoom microscope, showing a dense network of blood vessels. (b) The corresponding binary ground truth mask generated via adaptive Gaussian thresholding, where black pixels represent segmented vessel structures and white pixels represent background tissue.}
+    \label{fig:sample_angiography}
+\end{figure}
+
 \section{Challenges in Automated Blood Vessel Segmentation}
 The transition from manual annotation to automated algorithmic segmentation is fraught with formidable technical challenges. While early attempts utilizing traditional image processing techniques---such as matched filtering, Hessian-based Frangi filters, and morphological operations---showed initial promise, they fundamentally struggle to generalize across diverse clinical datasets. The difficulties in achieving robust automated segmentation stem from several factors inherent to both the biological complexity of the vascular system and the physics of the image acquisition process:
 
@@ -56,7 +75,30 @@ This thesis makes several substantial contributions to the fields of medical ima
     \item \textbf{Optimized Hybrid Loss Formulations:} We successfully implement and validate hybrid loss functions that force the gradient descent optimization to prioritize overlapping regional predictions (Dice) while simultaneously penalizing hard-to-classify pixels (Focal Loss). We demonstrate that these formulations prevent background collapse and significantly elevate the Dice Coefficient on the validation set.
     \item \textbf{Integration of Heavy Data Augmentation:} We integrate the Albumentations library to apply severe, dynamic spatial and pixel-level augmentations during training. We show that this approach drastically reduces overfitting and improves the generalization of the models on unseen test distributions.
     \item \textbf{Automated Topological Biomarker Extraction:} Moving beyond simple pixel accuracy, we introduce a complete downstream pipeline that utilizes iterative skeletonization algorithms on the predicted masks. This allows the system to autonomously count the number of distinct, disconnected vascular networks and map branch/endpoints, transitioning the output from a visual mask to a quantitative clinical report.
+    \item \textbf{CAM Assay Biological Validation:} The complete pipeline is applied to a controlled \textit{in vivo} Chorioallantoic Membrane (CAM) assay experiment, demonstrating the system's ability to quantify dose-dependent angiogenic effects of carbon dots across multiple concentrations and timepoints, establishing direct relevance to tumor angiogenesis research.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=0.6cm,
+        block/.style={rectangle, draw=black!70, fill=blue!8, text width=3.2cm, minimum height=1.1cm, align=center, rounded corners=3pt, font=\small},
+        arrow/.style={-{Stealth[length=3mm]}, thick, draw=black!60}
+    ]
+        \node[block] (input) {RGB Angiography\\Image};
+        \node[block, right=of input] (preprocess) {Preprocessing\\(Resize, Normalize)};
+        \node[block, right=of preprocess] (segment) {Deep Learning\\Segmentation\\(UNet++ / DeepLabV3+)};
+        \node[block, right=of segment] (skeleton) {Morphological\\Skeletonization\\(Zhang-Suen)};
+        \node[block, right=of skeleton] (output) {Clinical Report\\(Networks, Branches,\\Endpoints)};
+        
+        \draw[arrow] (input) -- (preprocess);
+        \draw[arrow] (preprocess) -- (segment);
+        \draw[arrow] (segment) -- (skeleton);
+        \draw[arrow] (skeleton) -- (output);
+    \end{tikzpicture}
+    \caption{High-level overview of the proposed end-to-end automated vessel segmentation and morphological analysis pipeline. Raw RGB angiography images are preprocessed, segmented using deep learning architectures, skeletonized using morphological thinning, and finally analyzed to extract quantitative vascular biomarkers.}
+    \label{fig:pipeline_overview}
+\end{figure}
 
 \section{Organization of the Thesis}
 To provide a clear, logical, and rigorous exposition of the research conducted, the remainder of this thesis is structured as follows:
