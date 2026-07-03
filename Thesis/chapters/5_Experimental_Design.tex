@@ -82,17 +82,24 @@ These morphological counts, logged to the \texttt{vessel\_counts.csv} report, re
 \section{CAM Assay Biological Experiment Design}
 To evaluate the biological relevance of the automated segmentation and skeletonization pipeline, a controlled \textit{in vivo} experiment was conducted using the Chorioallantoic Membrane (CAM) assay on fertilized chicken embryos. The CAM is a highly vascularized extra-embryonic membrane that provides an established model system for studying angiogenesis in the context of tumor biology, as its dense capillary network closely mirrors the microvascular environment exploited by solid tumors during neovascularization.
 
-\subsection{Experimental Groups and Vehicle}
-Four experimental groups were established to investigate the dose-dependent effects of the compound on vascular morphology:
+\subsection{In Ovo Sample Preparation}
+Fertilized chicken eggs (\textit{Gallus gallus domesticus}, Brown Leghorn breed) were procured from local poultry farmers. Upon arrival, the eggs were gently cleaned with distilled water to remove natural debris from the shell surface. The cleaned eggs were then placed vertically in a humidified incubator maintained at $37\,^{\circ}\text{C}$ with a relative humidity of 60--80\%, oriented with the blunt end facing upward and the pointed end directed downward. The eggs were incubated under these conditions for a period of 96 hours to allow adequate development of the yolk sac membrane (YSM) vasculature.
+
+On the day of the experiment, the air sac located at the blunt end of each egg was identified using an egg candler for transillumination. A sharp, pointed instrument of approximately 2.5\,mm length was carefully inserted at the centre of the air sac to create an initial puncture. Shell fragments were then carefully removed using sharp-pointed forceps to expose the underlying membrane. The inner air sac membrane was moistened with 100\,$\mu$L of sterile normal saline (0.9\% NaCl) to prevent desiccation, and was subsequently peeled away to expose the YSM vasculature. For the treatment application site, a $2\,\text{mm}^2$ equivalent area of the outermost membrane overlying the blood vessels was carefully excised, while avoiding damage to thick, primary vessels and preventing hemorrhage from the underlying vascular bed.
+
+\subsection{Experimental Groups and Treatment Protocol}
+Four experimental groups were established to investigate the dose-dependent effects of the test compound on vascular morphology. Each treatment was dissolved in 0.9\% sterile normal saline, which served as the carrier vehicle. The groups were defined as follows:
 \begin{itemize}
-    \item \textbf{0.1\,$\mu$g Group:} Compound dissolved in 0.9\% normal saline at a concentration of 0.1\,$\mu$g.
-    \item \textbf{1\,$\mu$g Group:} Compound dissolved in 0.9\% normal saline at a concentration of 1\,$\mu$g.
-    \item \textbf{10\,$\mu$g Group:} Compound dissolved in 0.9\% normal saline at a concentration of 10\,$\mu$g.
-    \item \textbf{Vehicle Control:} 0.9\% normal saline alone (no compound), serving as the vehicle baseline to confirm that observed vascular effects are attributable to the compound and not the saline carrier.
+    \item \textbf{0.1\,$\mu$g Group:} Test compound dissolved in 0.9\% normal saline at a dose of 0.1\,$\mu$g, applied topically onto the exposed YSM at the treatment site.
+    \item \textbf{1\,$\mu$g Group:} Test compound dissolved in 0.9\% normal saline at a dose of 1\,$\mu$g, applied under identical conditions.
+    \item \textbf{10\,$\mu$g Group:} Test compound dissolved in 0.9\% normal saline at a dose of 10\,$\mu$g, applied under identical conditions.
+    \item \textbf{Vehicle Control:} 0.9\% normal saline alone (no compound), applied in an equivalent volume to the treatment site. This group served as the vehicle baseline to confirm that any observed vascular effects were attributable to the test compound and not to the saline carrier or the mechanical perturbation of the membrane.
 \end{itemize}
 
+Following treatment application according to the assigned dose group, the eggs were returned to the incubator and maintained under the same incubation conditions ($37\,^{\circ}\text{C}$, 60--80\% relative humidity) for the duration of the experiment.
+
 \subsection{Timepoints and Image Acquisition}
-The CAM vasculature was imaged at five timepoints post-application: 0h (baseline, prior to treatment), 2h, 4h, 8h, and 24h. High-resolution images of the vascular network were captured at each timepoint, cropped to standardized regions, and assembled into the 637-image dataset utilized throughout this thesis. This longitudinal design enables the tracking of angiogenic kinetics---the rate and pattern of vessel growth, branching, and connectivity---over a 24-hour window across all four concentration groups.
+The CAM vasculature was imaged at five timepoints post-treatment application: 0h (baseline, acquired immediately prior to treatment), 2h, 4h, 8h, and 24h. At each defined timepoint, high-resolution RGB images of the vascular network at the treatment site were acquired using a stereozoom microscope (Magnus ZM6, equipped with a 10\,MP digital camera). The acquired images were subsequently cropped to standardized regions of interest and assembled into the 637-image dataset utilized throughout this thesis. This longitudinal imaging design enables the tracking of angiogenic kinetics---the rate and pattern of vessel growth, branching, and connectivity---over a 24-hour window across all four concentration groups.
 
 \subsection{Cancer Relevance}
 The rationale for this experimental design is grounded in the observation that tumor angiogenesis---the recruitment of new blood vessels by malignant tumors---is a critical hallmark of cancer progression. Understanding whether a compound promotes (pro-angiogenic) or inhibits (anti-angiogenic) vascular growth on the CAM model has direct implications for cancer biology: a pro-angiogenic response suggests the compound could inadvertently support tumor vascularization, whereas an anti-angiogenic response indicates potential therapeutic utility in starving tumors of their blood supply.
