@@ -67,49 +67,73 @@ dice_val = (2.0 * np.array(val_ious) / (1.0 + np.array(val_ious))).tolist()
 
 epochs = list(range(len(losses)))
 
-# ── Plot 2x2 grid matching UNet++ style ──────────────────────────────────────
-fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-fig.suptitle("DeepLabV3+ (ResNet50 Backbone) Training & Validation Curves", fontsize=16, fontweight="bold")
+# ── Plot definitions ─────────────────────────────────────────────────────────
+TITLE_SIZE  = 36
+LABEL_SIZE  = 28
+TICK_SIZE   = 22
+LEGEND_SIZE = 22
+LINE_WIDTH  = 3.5
 
-# Plot 1: Loss
-axes[0, 0].plot(epochs, losses, label="Train Loss", color="#e74c3c", linewidth=2.5)
-axes[0, 0].plot(epochs, val_losses, label="Val Loss", color="#c0392b", linewidth=2.5, linestyle="--")
-axes[0, 0].set_title("Model Loss (BCE + Dice Combined)", fontsize=12, fontweight="bold")
-axes[0, 0].set_xlabel("Epoch", fontsize=10)
-axes[0, 0].set_ylabel("Loss Value", fontsize=10)
-axes[0, 0].grid(True, alpha=0.3)
-axes[0, 0].legend()
+plots = [
+    {
+        "filename": "deeplabv3plus_loss.png",
+        "title": "Model Loss (BCE + Dice Combined)",
+        "xlabel": "Epoch",
+        "ylabel": "Loss Value",
+        "lines": [
+            {"data": losses,      "label": "Train Loss", "color": "#e74c3c", "ls": "-"},
+            {"data": val_losses,   "label": "Val Loss",   "color": "#c0392b", "ls": "--"},
+        ],
+    },
+    {
+        "filename": "deeplabv3plus_dice.png",
+        "title": "Vessel Dice Coefficient (F1-Score)",
+        "xlabel": "Epoch",
+        "ylabel": "Dice Score",
+        "lines": [
+            {"data": dice_train, "label": "Train Dice", "color": "#2ecc71", "ls": "-"},
+            {"data": dice_val,   "label": "Val Dice",   "color": "#27ae60", "ls": "--"},
+        ],
+    },
+    {
+        "filename": "deeplabv3plus_iou.png",
+        "title": "Mean Intersection over Union\n(IoU / Jaccard Index)",
+        "xlabel": "Epoch",
+        "ylabel": "IoU Score",
+        "lines": [
+            {"data": ious,      "label": "Train IoU", "color": "#3498db", "ls": "-"},
+            {"data": val_ious,  "label": "Val IoU",   "color": "#2980b9", "ls": "--"},
+        ],
+    },
+    {
+        "filename": "deeplabv3plus_accuracy.png",
+        "title": "Pixel-wise Accuracy",
+        "xlabel": "Epoch",
+        "ylabel": "Accuracy",
+        "lines": [
+            {"data": accuracies,     "label": "Train Accuracy", "color": "#9b59b6", "ls": "-"},
+            {"data": val_accuracies, "label": "Val Accuracy",   "color": "#8e44ad", "ls": "--"},
+        ],
+    },
+]
 
-# Plot 2: Dice Coefficient
-axes[0, 1].plot(epochs, dice_train, label="Train Dice", color="#2ecc71", linewidth=2.5)
-axes[0, 1].plot(epochs, dice_val, label="Val Dice", color="#27ae60", linewidth=2.5, linestyle="--")
-axes[0, 1].set_title("Vessel Dice Coefficient (F1-Score)", fontsize=12, fontweight="bold")
-axes[0, 1].set_xlabel("Epoch", fontsize=10)
-axes[0, 1].set_ylabel("Dice Score", fontsize=10)
-axes[0, 1].grid(True, alpha=0.3)
-axes[0, 1].legend()
+# ── Generate 4 separate figures ──────────────────────────────────────────────
+for p in plots:
+    fig, ax = plt.subplots(figsize=(12, 9))
 
-# Plot 3: IoU Score
-axes[1, 0].plot(epochs, ious, label="Train IoU", color="#3498db", linewidth=2.5)
-axes[1, 0].plot(epochs, val_ious, label="Val IoU", color="#2980b9", linewidth=2.5, linestyle="--")
-axes[1, 0].set_title("Mean Intersection over Union (IoU / Jaccard Index)", fontsize=12, fontweight="bold")
-axes[1, 0].set_xlabel("Epoch", fontsize=10)
-axes[1, 0].set_ylabel("IoU Score", fontsize=10)
-axes[1, 0].grid(True, alpha=0.3)
-axes[1, 0].legend()
+    for line in p["lines"]:
+        ax.plot(epochs, line["data"], label=line["label"],
+                color=line["color"], linewidth=LINE_WIDTH, linestyle=line["ls"])
 
-# Plot 4: Accuracy (DeepLabV3+ logged accuracy instead of precision/recall)
-axes[1, 1].plot(epochs, accuracies, label="Train Accuracy", color="#9b59b6", linewidth=2.5)
-axes[1, 1].plot(epochs, val_accuracies, label="Val Accuracy", color="#8e44ad", linewidth=2.5, linestyle="--")
-axes[1, 1].set_title("Pixel-wise Accuracy", fontsize=12, fontweight="bold")
-axes[1, 1].set_xlabel("Epoch", fontsize=10)
-axes[1, 1].set_ylabel("Accuracy", fontsize=10)
-axes[1, 1].grid(True, alpha=0.3)
-axes[1, 1].legend()
+    ax.set_title(p["title"], fontsize=TITLE_SIZE, fontweight="bold")
+    ax.set_xlabel(p["xlabel"], fontsize=LABEL_SIZE)
+    ax.set_ylabel(p["ylabel"], fontsize=LABEL_SIZE)
+    ax.tick_params(axis="both", labelsize=TICK_SIZE)
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=LEGEND_SIZE)
 
-plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-plot_path = os.path.join(OUTPUT_DIR, "deeplabv3plus_training_curve.png")
-plt.savefig(plot_path, dpi=150)
-plt.close()
-print(f"Success! Generated training curve plot at: {plot_path}")
+    plt.tight_layout()
+    save_path = os.path.join(OUTPUT_DIR, p["filename"])
+    plt.savefig(save_path, dpi=150)
+    plt.close()
+    print(f"Saved: {save_path}")

@@ -191,10 +191,16 @@ for m in metrics:
 # ── Plot Pearson correlation scatter graphs ─────────────────────────────────
 print("[6/6] Generating Pearson correlation plots...")
 
-fig, axes = plt.subplots(2, 3, figsize=(18, 11))
+TITLE_SIZE    = 36
+SUBTITLE_SIZE = 28
+LABEL_SIZE    = 24
+TICK_SIZE     = 20
+ANNOT_SIZE    = 12
+
+fig, axes = plt.subplots(2, 3, figsize=(36, 22))
 fig.suptitle("Pearson Correlation: Ground Truth vs Predicted Skeleton Properties\n"
              "(Each point = one test image)",
-             fontsize=15, fontweight="bold", y=0.98)
+             fontsize=TITLE_SIZE, fontweight="bold", y=0.98)
 
 colors_up = "#2196F3"   # Blue for UNet++
 colors_dl = "#FF5722"   # Red-orange for DeepLabV3+
@@ -218,12 +224,13 @@ for col, m in enumerate(metrics):
     # Annotate image IDs
     for i, img_id in enumerate(valid_ids):
         ax.annotate(str(img_id), (gt_arr[i], up_arr[i]),
-                     fontsize=7, ha='left', va='bottom', xytext=(4, 4),
+                     fontsize=ANNOT_SIZE, ha='left', va='bottom', xytext=(4, 4),
                      textcoords='offset points')
-    ax.set_xlabel(f"Ground Truth {metric_labels[m]}", fontsize=10)
-    ax.set_ylabel(f"UNet++ Predicted {metric_labels[m]}", fontsize=10)
+    ax.set_xlabel(f"Ground Truth {metric_labels[m]}", fontsize=LABEL_SIZE)
+    ax.set_ylabel(f"UNet++ Predicted {metric_labels[m]}", fontsize=LABEL_SIZE)
     ax.set_title(f"UNet++ - {metric_labels[m]}\nr = {r_up:.4f}, p = {p_up:.4f}",
-                 fontsize=11, fontweight="bold", color=colors_up)
+                 fontsize=SUBTITLE_SIZE, fontweight="bold", color=colors_up)
+    ax.tick_params(axis='both', labelsize=TICK_SIZE)
     ax.grid(True, alpha=0.3)
 
     # ---- Row 1: DeepLabV3+ ----
@@ -236,12 +243,13 @@ for col, m in enumerate(metrics):
         ax.plot(x_range, p_line(x_range), '--', color=colors_dl, alpha=0.7, linewidth=2)
     for i, img_id in enumerate(valid_ids):
         ax.annotate(str(img_id), (gt_arr[i], dl_arr[i]),
-                     fontsize=7, ha='left', va='bottom', xytext=(4, 4),
+                     fontsize=ANNOT_SIZE, ha='left', va='bottom', xytext=(4, 4),
                      textcoords='offset points')
-    ax.set_xlabel(f"Ground Truth {metric_labels[m]}", fontsize=10)
-    ax.set_ylabel(f"DeepLabV3+ Predicted {metric_labels[m]}", fontsize=10)
+    ax.set_xlabel(f"Ground Truth {metric_labels[m]}", fontsize=LABEL_SIZE)
+    ax.set_ylabel(f"DeepLabV3+ Predicted {metric_labels[m]}", fontsize=LABEL_SIZE)
     ax.set_title(f"DeepLabV3+ - {metric_labels[m]}\nr = {r_dl:.4f}, p = {p_dl:.4f}",
-                 fontsize=11, fontweight="bold", color=colors_dl)
+                 fontsize=SUBTITLE_SIZE, fontweight="bold", color=colors_dl)
+    ax.tick_params(axis='both', labelsize=TICK_SIZE)
     ax.grid(True, alpha=0.3)
 
 plt.tight_layout(rect=[0, 0, 1, 0.94])

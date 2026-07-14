@@ -65,22 +65,18 @@ for i, gl in enumerate(metric_labels):
         print(f"    GT {gl.replace(chr(10),' ')} vs Pred {pl.replace(chr(10),' ')}: "
               f"rho = {dlv3_corr[i,j]:.4f}, p = {dlv3_pval[i,j]:.4f}")
 
-# ── Plot 1: Side-by-side heatmaps ──────────────────────────────────────────
+# ── Font sizes ──────────────────────────────────────────────────────────────
+TITLE_SIZE  = 36
+LABEL_SIZE  = 28
+TICK_SIZE   = 22
+LEGEND_SIZE = 22
+ANNOT_SIZE  = 20
+CBAR_LABEL  = 22
+BAR_VAL_SIZE = 16
+
+# ── Plot 1a: Heatmap — UNet++ ──────────────────────────────────────────────
 print("\n[3/4] Generating Spearman correlation heatmaps...")
 
-fig, axes = plt.subplots(1, 2, figsize=(16, 7))
-fig.suptitle("Spearman Rank Correlation Heatmaps: Ground Truth vs Predicted Skeleton Properties",
-             fontsize=14, fontweight="bold", y=1.02)
-
-gt_labels   = [f"GT\n{m}" for m in metric_labels]
-pred_labels_up = [f"UNet++\n{m}" for m in metric_labels]
-pred_labels_dl = [f"DeepLabV3+\n{m}" for m in metric_labels]
-
-# --- Heatmap: UNet++ ---
-ax = axes[0]
-mask_up = np.zeros_like(unetpp_corr, dtype=bool)
-
-# Create annotation strings with ρ and p-value
 annot_up = np.empty_like(unetpp_corr, dtype=object)
 for i in range(unetpp_corr.shape[0]):
     for j in range(unetpp_corr.shape[1]):
@@ -89,18 +85,31 @@ for i in range(unetpp_corr.shape[0]):
         sig = "***" if p_val < 0.001 else "**" if p_val < 0.01 else "*" if p_val < 0.05 else "ns"
         annot_up[i, j] = f"{r_val:.3f}\n({sig})"
 
+fig, ax = plt.subplots(figsize=(10, 9))
 sns.heatmap(unetpp_corr, ax=ax, annot=annot_up, fmt="",
             xticklabels=metric_labels, yticklabels=metric_labels,
             cmap="RdYlBu_r", center=0, vmin=-1, vmax=1,
             linewidths=2, linecolor="white",
-            square=True, cbar_kws={"label": "Spearman ρ", "shrink": 0.8})
-ax.set_title("UNet++", fontsize=13, fontweight="bold", color="#2196F3", pad=15)
-ax.set_xlabel("Predicted Properties", fontsize=11, fontweight="bold")
-ax.set_ylabel("Ground Truth Properties", fontsize=11, fontweight="bold")
-ax.tick_params(axis='both', labelsize=9)
+            square=True, annot_kws={"size": ANNOT_SIZE},
+            cbar_kws={"label": "Spearman ρ", "shrink": 0.8})
+ax.set_title("UNet++\nSpearman Rank Correlation", fontsize=TITLE_SIZE, fontweight="bold", color="#2196F3", pad=20)
+ax.set_xlabel("Predicted Properties", fontsize=LABEL_SIZE, fontweight="bold")
+ax.set_ylabel("Ground Truth Properties", fontsize=LABEL_SIZE, fontweight="bold")
+ax.tick_params(axis='both', labelsize=TICK_SIZE)
+# Style colorbar label
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=TICK_SIZE)
+cbar.set_label("Spearman ρ", fontsize=CBAR_LABEL)
+fig.text(0.5, -0.02,
+         "Significance: *** p < 0.001  |  ** p < 0.01  |  * p < 0.05  |  ns = not significant",
+         ha='center', fontsize=16, style='italic', color='gray')
+plt.tight_layout()
+path1 = os.path.join(OUTPUT_DIR, "spearman_heatmap_unetpp.png")
+plt.savefig(path1, dpi=150, bbox_inches="tight")
+plt.close()
+print(f"  Saved -> {path1}")
 
-# --- Heatmap: DeepLabV3+ ---
-ax = axes[1]
+# ── Plot 1b: Heatmap — DeepLabV3+ ─────────────────────────────────────────
 annot_dl = np.empty_like(dlv3_corr, dtype=object)
 for i in range(dlv3_corr.shape[0]):
     for j in range(dlv3_corr.shape[1]):
@@ -109,31 +118,32 @@ for i in range(dlv3_corr.shape[0]):
         sig = "***" if p_val < 0.001 else "**" if p_val < 0.01 else "*" if p_val < 0.05 else "ns"
         annot_dl[i, j] = f"{r_val:.3f}\n({sig})"
 
+fig, ax = plt.subplots(figsize=(10, 9))
 sns.heatmap(dlv3_corr, ax=ax, annot=annot_dl, fmt="",
             xticklabels=metric_labels, yticklabels=metric_labels,
             cmap="RdYlBu_r", center=0, vmin=-1, vmax=1,
             linewidths=2, linecolor="white",
-            square=True, cbar_kws={"label": "Spearman ρ", "shrink": 0.8})
-ax.set_title("DeepLabV3+", fontsize=13, fontweight="bold", color="#FF5722", pad=15)
-ax.set_xlabel("Predicted Properties", fontsize=11, fontweight="bold")
-ax.set_ylabel("Ground Truth Properties", fontsize=11, fontweight="bold")
-ax.tick_params(axis='both', labelsize=9)
-
-# Add significance legend
+            square=True, annot_kws={"size": ANNOT_SIZE},
+            cbar_kws={"label": "Spearman ρ", "shrink": 0.8})
+ax.set_title("DeepLabV3+\nSpearman Rank Correlation", fontsize=TITLE_SIZE, fontweight="bold", color="#FF5722", pad=20)
+ax.set_xlabel("Predicted Properties", fontsize=LABEL_SIZE, fontweight="bold")
+ax.set_ylabel("Ground Truth Properties", fontsize=LABEL_SIZE, fontweight="bold")
+ax.tick_params(axis='both', labelsize=TICK_SIZE)
+cbar = ax.collections[0].colorbar
+cbar.ax.tick_params(labelsize=TICK_SIZE)
+cbar.set_label("Spearman ρ", fontsize=CBAR_LABEL)
 fig.text(0.5, -0.02,
          "Significance: *** p < 0.001  |  ** p < 0.01  |  * p < 0.05  |  ns = not significant",
-         ha='center', fontsize=10, style='italic', color='gray')
-
+         ha='center', fontsize=16, style='italic', color='gray')
 plt.tight_layout()
-heatmap_path = os.path.join(OUTPUT_DIR, "spearman_correlation_heatmaps.png")
-plt.savefig(heatmap_path, dpi=150, bbox_inches="tight")
+path2 = os.path.join(OUTPUT_DIR, "spearman_heatmap_deeplabv3.png")
+plt.savefig(path2, dpi=150, bbox_inches="tight")
 plt.close()
-print(f"  Saved -> {heatmap_path}")
+print(f"  Saved -> {path2}")
 
-# ── Plot 2: Comparison bar chart (diagonal values only) ────────────────────
-print("[4/4] Generating Pearson vs Spearman comparison chart...")
+# ── Plot 2: Comparison bar charts (separate) ───────────────────────────────
+print("[4/4] Generating Pearson vs Spearman comparison charts...")
 
-# Also compute Pearson for comparison
 from scipy.stats import pearsonr
 
 pearson_unetpp_diag = []
@@ -150,69 +160,67 @@ for i in range(3):
     pearson_dlv3_diag.append(r_p)
     spearman_dlv3_diag.append(dlv3_corr[i, i])
 
-# Bar chart comparison
-fig, axes = plt.subplots(1, 2, figsize=(14, 6))
-fig.suptitle("Pearson vs Spearman Correlation Comparison\n(GT vs Predicted — Diagonal Values)",
-             fontsize=14, fontweight="bold")
-
 x = np.arange(3)
 width = 0.35
 short_labels = ["Connected\nComponents", "Branch\nPoints", "Endpoints"]
 
-# UNet++
-ax = axes[0]
+# ── Plot 2a: Bar chart — UNet++ ────────────────────────────────────────────
+fig, ax = plt.subplots(figsize=(12, 9))
 bars1 = ax.bar(x - width/2, pearson_unetpp_diag, width, label='Pearson r',
                color='#42A5F5', edgecolor='black', linewidth=0.8)
 bars2 = ax.bar(x + width/2, spearman_unetpp_diag, width, label='Spearman ρ',
                color='#1565C0', edgecolor='black', linewidth=0.8)
-ax.set_ylabel("Correlation Coefficient", fontsize=11)
-ax.set_title("UNet++", fontsize=13, fontweight="bold", color="#2196F3")
+ax.set_ylabel("Correlation Coefficient", fontsize=LABEL_SIZE)
+ax.set_title("UNet++\nPearson vs Spearman Comparison", fontsize=TITLE_SIZE, fontweight="bold", color="#2196F3")
 ax.set_xticks(x)
-ax.set_xticklabels(short_labels, fontsize=9)
-ax.legend(fontsize=10)
+ax.set_xticklabels(short_labels, fontsize=TICK_SIZE)
+ax.tick_params(axis='y', labelsize=TICK_SIZE)
+ax.legend(fontsize=LEGEND_SIZE)
 ax.set_ylim([-1, 1])
 ax.axhline(y=0, color='black', linewidth=0.5)
 ax.grid(axis='y', alpha=0.3)
-
-# Add value labels on bars
 for bar in bars1:
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height + 0.02,
-            f'{height:.3f}', ha='center', va='bottom', fontsize=8, fontweight='bold')
+            f'{height:.3f}', ha='center', va='bottom', fontsize=BAR_VAL_SIZE, fontweight='bold')
 for bar in bars2:
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height + 0.02,
-            f'{height:.3f}', ha='center', va='bottom', fontsize=8, fontweight='bold')
+            f'{height:.3f}', ha='center', va='bottom', fontsize=BAR_VAL_SIZE, fontweight='bold')
+plt.tight_layout()
+path3 = os.path.join(OUTPUT_DIR, "pearson_vs_spearman_unetpp.png")
+plt.savefig(path3, dpi=150, bbox_inches="tight")
+plt.close()
+print(f"  Saved -> {path3}")
 
-# DeepLabV3+
-ax = axes[1]
+# ── Plot 2b: Bar chart — DeepLabV3+ ───────────────────────────────────────
+fig, ax = plt.subplots(figsize=(12, 9))
 bars1 = ax.bar(x - width/2, pearson_dlv3_diag, width, label='Pearson r',
                color='#FF7043', edgecolor='black', linewidth=0.8)
 bars2 = ax.bar(x + width/2, spearman_dlv3_diag, width, label='Spearman ρ',
                color='#D84315', edgecolor='black', linewidth=0.8)
-ax.set_ylabel("Correlation Coefficient", fontsize=11)
-ax.set_title("DeepLabV3+", fontsize=13, fontweight="bold", color="#FF5722")
+ax.set_ylabel("Correlation Coefficient", fontsize=LABEL_SIZE)
+ax.set_title("DeepLabV3+\nPearson vs Spearman Comparison", fontsize=TITLE_SIZE, fontweight="bold", color="#FF5722")
 ax.set_xticks(x)
-ax.set_xticklabels(short_labels, fontsize=9)
-ax.legend(fontsize=10)
+ax.set_xticklabels(short_labels, fontsize=TICK_SIZE)
+ax.tick_params(axis='y', labelsize=TICK_SIZE)
+ax.legend(fontsize=LEGEND_SIZE)
 ax.set_ylim([-1, 1])
 ax.axhline(y=0, color='black', linewidth=0.5)
 ax.grid(axis='y', alpha=0.3)
-
 for bar in bars1:
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height + 0.02,
-            f'{height:.3f}', ha='center', va='bottom', fontsize=8, fontweight='bold')
+            f'{height:.3f}', ha='center', va='bottom', fontsize=BAR_VAL_SIZE, fontweight='bold')
 for bar in bars2:
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2., height + 0.02,
-            f'{height:.3f}', ha='center', va='bottom', fontsize=8, fontweight='bold')
-
+            f'{height:.3f}', ha='center', va='bottom', fontsize=BAR_VAL_SIZE, fontweight='bold')
 plt.tight_layout()
-comparison_path = os.path.join(OUTPUT_DIR, "pearson_vs_spearman_comparison.png")
-plt.savefig(comparison_path, dpi=150, bbox_inches="tight")
+path4 = os.path.join(OUTPUT_DIR, "pearson_vs_spearman_deeplabv3.png")
+plt.savefig(path4, dpi=150, bbox_inches="tight")
 plt.close()
-print(f"  Saved -> {comparison_path}")
+print(f"  Saved -> {path4}")
 
 # ── Summary ─────────────────────────────────────────────────────────────────
 print("\n" + "=" * 70)
@@ -234,5 +242,6 @@ for i in range(3):
     print(f"    {short_names[i]:<25} Delta = {diff:.4f}")
 print("=" * 70)
 print("\n[DONE] Spearman correlation analysis complete!")
-print(f"  Heatmaps    -> {heatmap_path}")
-print(f"  Comparison  -> {comparison_path}")
+print(f"  Heatmaps    -> {path1}, {path2}")
+print(f"  Comparison  -> {path3}, {path4}")
+
